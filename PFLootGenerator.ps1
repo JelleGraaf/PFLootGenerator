@@ -15,10 +15,8 @@
 .TO DO
     Add tables for weapons
     Add tables for potions
-    Add tables for rings
     Add tables for rods
     Add tables for scrolls
-    Add tables for staves
     Add tables for wands
     Add script switches -auto (never ask anything) and -# (to generate # items in one run)
 .To fix:
@@ -71,7 +69,7 @@ Function Get-DNDRandomItemTypeMedium {
         {31..40 -contains $_}  {$ItemType = "ring"}
         {41..50 -contains $_}  {$ItemType = "rod"}
         {51..65 -contains $_}  {$ItemType = "scroll"}
-        {66..68 -contains $_}  {$ItemType = "stave"}
+        {66..68 -contains $_}  {$ItemType = "staff"}
         {69..83 -contains $_}  {$ItemType = "wand"}
         {84..100 -contains $_} {$ItemType = "wondrous item"}
     } #End Switch
@@ -90,7 +88,7 @@ Function Get-DNDRandomItemTypeMajor {
         {26..35 -contains $_}  {$ItemType = "ring"}
         {36..45 -contains $_}  {$ItemType = "rod"}
         {46..55 -contains $_}  {$ItemType = "scroll"}
-        {56..75 -contains $_}  {$ItemType = "stave"}
+        {56..75 -contains $_}  {$ItemType = "staff"}
         {76..80 -contains $_}  {$ItemType = "wand"}
         {81..100 -contains $_} {$ItemType = "wondrous item"}
     } #End Switch
@@ -449,6 +447,55 @@ Function Get-DNDRingMajor {
     } #End Switch
     return $RingMajor
 } #End function Get-DNDRingMajor
+
+Function Get-DNDStaffMedium {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..15 -contains $_}  {$StaffMedium = "Charming"}
+        {16..30 -contains $_}  {$StaffMedium = "Fire"}
+        {31..40 -contains $_}  {$StaffMedium = "Swarming insects"}
+        {41..55 -contains $_}  {$StaffMedium = "Size alteration"}
+        {56..75 -contains $_}  {$StaffMedium = "Healing"}
+        {76..90 -contains $_}  {$StaffMedium = "Frost"}
+        {91..95 -contains $_}  {$StaffMedium = "Illumination"}
+        {96..100 -contains $_} {$StaffMedium = "Defense"}
+    } #End Switch
+    return $StaffMedium
+} #End function Get-DNDStaffMedium
+
+Function Get-DNDStaffMajor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..03 -contains $_}  {$StaffMajor = "Charming"}
+        {04..09 -contains $_}  {$StaffMajor = "Fire"}
+        {10..11 -contains $_}  {$StaffMajor = "Swarming insects"}
+        {12..13 -contains $_}  {$StaffMajor = "Size alteration"}
+        {14..19 -contains $_}  {$StaffMajor = "Healing"}
+        {20..24 -contains $_}  {$StaffMajor = "Frost"}
+        {25..31 -contains $_}  {$StaffMajor = "Illumination"}
+        {32..38 -contains $_}  {$StaffMajor = "Defense"}
+        {39..45 -contains $_}  {$StaffMajor = "Abjuration"}
+        {46..50 -contains $_}  {$StaffMajor = "Conjuration"}
+        {51..55 -contains $_}  {$StaffMajor = "Divination"}
+        {56..60 -contains $_}  {$StaffMajor = "Enchantment"}
+        {61..65 -contains $_}  {$StaffMajor = "Evocation"}
+        {66..70 -contains $_}  {$StaffMajor = "Illusion"}
+        {71..75 -contains $_}  {$StaffMajor = "Necromancy"}
+        {76..80 -contains $_}  {$StaffMajor = "Transmutation"}
+        {81..85 -contains $_}  {$StaffMajor = "Earth and stone"}
+        {86..90 -contains $_}  {$StaffMajor = "Woodlands"}
+        {91..95 -contains $_}  {$StaffMajor = "Life"}
+        {96..98 -contains $_}  {$StaffMajor = "Passage"}
+        {99..100 -contains $_} {$StaffMajor = "Power"}
+    } #End Switch
+    return $StaffMajor
+} #End function Get-DNDStaffMajor
 
 Function Get-DNDWondrousItemMinor {
     $WondrousItemList = @(
@@ -939,6 +986,19 @@ If ($Item.BaseItem -eq "ring") {
 #region scrolls
 #-------------------------
 #endregion scrolls
+
+#-------------------------
+#region staves
+#-------------------------
+If ($Item.BaseItem -eq "staff") {
+    #Search through the table of items, getting the correct table from the previous roll
+    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol voor wat voor staff was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
+    If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor wat voor staff. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+    
+    If ($ItemPower -eq "medium") {$Item.BaseItem = "Staff of " + (Get-DNDStaffMedium -Dieroll $Die)}
+    If ($ItemPower -eq "major")  {$Item.BaseItem = "Staff of " + (Get-DNDStaffMajor -Dieroll $Die)}
+}
+#endregion staves
 
 #-------------------------
 #region wands
