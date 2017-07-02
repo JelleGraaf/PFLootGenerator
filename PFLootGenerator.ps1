@@ -1,3 +1,36 @@
+######################################################################
+# Script name: PFLootGenerator.ps1                                   #
+# Version: 0.1                                                       #
+# Created by: Jelle de Graaf                                         #
+# Last change: 02-07-2017                                            #
+# GitHub repository: https://github.com/JelleGraaf/PFLootGenerator   #
+######################################################################
+<#
+.Synopsis
+    Generate random Pathfinder loot
+.DESCRIPTION
+    This script generates a random piece of loot, according to the random tables in the Pathfinder Core Rulebook
+.EXAMPLE
+    Just run PFLootGenerator.ps1 for now. Switches will be implemented in the future
+.TO DO
+    Add tables for weapons
+    Add tables for potions
+    Add tables for rings
+    Add tables for rods
+    Add tables for scrolls
+    Add tables for staves
+    Add tables for wands
+    Add script switches -auto (never ask anything) and -# (to generate # items in one run)
+.To fix:
+    Wondrous items with a bonus (e.g. +1) show the bonus two times
+#>
+
+#This script generates a random piece of loot, according to the random tables in the Pathfinder Core Rulebook
+#For now, you can choose to roll yourself, or let the script roll
+#To fix:
+    #Wondrous items with a bonus (e.g. +1) show the bonus two times
+
+
 [BOOL]$Automatic = $True #To specify whether the script should rol the dice, or the user
 $ItemPower = "unspecified" #To later set to Minor, Medium or Major
 $Item = @{
@@ -689,17 +722,19 @@ Write-Host "$($Item.BaseItem)" -ForegroundColor Cyan
 #-------------------------
 #region tweede rol en verder: item bepalen
 #-------------------------
-#Search through the table of items, getting the correct table from the previous roll
-If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
-If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
 
 #-------------------------
 #region armors and shields
 #-------------------------
 If ($Item.BaseItem -eq "armor or shield") {
+    #Search through the table of items, getting the correct table from the previous roll
+    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol voor wat voor pantser/schild was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
+    If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor wat voor pantser/schild. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+    
     If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRandomArmorMinor -Dieroll $Die}
     If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDRandomArmorMedium -Dieroll $Die}
     If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDRandomArmorMajor -Dieroll $Die}
+
 
     #User feedback
     Write-Host "Je itemtype is: " -NoNewline
@@ -815,7 +850,7 @@ If ($Item.BaseItem -eq "wondrous item") {
     If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDWondrousItemMinor}
     If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDWondrousItemMedium}
     If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDWondrousItemMajor}
-
+}
 #################################################################################FEEDBACK?
 #endregion wondrous items
 
