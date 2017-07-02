@@ -22,7 +22,7 @@
     Add tables for wands
     Add script switches -auto (never ask anything) and -# (to generate # items in one run)
 .To fix:
-    Wondrous items with a bonus (e.g. +1) show the bonus two times
+    items other than armor/shield with a bonus (e.g. +1) show the bonus two times
 #>
 
 #This script generates a random piece of loot, according to the random tables in the Pathfinder Core Rulebook
@@ -355,6 +355,100 @@ Function Get-DNDSpecificShieldMajor {
     } #End Switch
     return $SpecificShieldMajor
 } #End function Get-DNDSpecificShieldMajor
+
+Function Get-DNDRingMinor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..18 -contains $_}  {$RingMinor = "Protection +1"}
+        {19..28 -contains $_}  {$RingMinor = "Feather falling"}
+        {29..36 -contains $_}  {$RingMinor = "Sustenance"}
+        {37..44 -contains $_}  {$RingMinor = "Climbing"}
+        {45..52 -contains $_}  {$RingMinor = "Jumping"}
+        {53..60 -contains $_}  {$RingMinor = "Swimming"}
+        {61..70 -contains $_}  {$RingMinor = "Counterspells"}
+        {71..75 -contains $_}  {$RingMinor = "Mind shielding"}
+        {76..80 -contains $_}  {$RingMinor = "Protection +2"}
+        {81..85 -contains $_}  {$RingMinor = "Force shield"}
+        {86..90 -contains $_}  {$RingMinor = "Ram, the"}
+        {91..93 -contains $_}  {$RingMinor = "Animal friendship"}
+        {94..96 -contains $_}  {$RingMinor = "Energy resistance, minor"}
+        {97..98 -contains $_}  {$RingMinor = "Chameleon power"}
+        {99..100 -contains $_} {$RingMinor = "Water walking"}
+    } #End Switch
+    return $RingMinor
+} #End function Get-DNDRingMinor
+
+Function Get-DNDRingMedium {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..05 -contains $_}  {$RingMedium = "Counterspells"}
+        {06..08 -contains $_}  {$RingMedium = "Mind shielding"}
+        {09..18 -contains $_}  {$RingMedium = "Protection +2"}
+        {19..23 -contains $_}  {$RingMedium = "Force shield"}
+        {24..28 -contains $_}  {$RingMedium = "Ram, the"}
+        {29..34 -contains $_}  {$RingMedium = "Climbing, improved"}
+        {35..40 -contains $_}  {$RingMedium = "Jumping, improved"}
+        {41..46 -contains $_}  {$RingMedium = "Swimming, improved"}
+        {47..50 -contains $_}  {$RingMedium = "Animal friendship"}
+        {51..56 -contains $_}  {$RingMedium = "Energy resistance, minor"}
+        {57..61 -contains $_}  {$RingMedium = "Chameleon power"}
+        {62..66 -contains $_}  {$RingMedium = "Water walking"}
+        {67..71 -contains $_}  {$RingMedium = "Protection +3"}
+        {72..76 -contains $_}  {$RingMedium = "Spell storing, minor"}
+        {77..81 -contains $_}  {$RingMedium = "Invisibility"}
+        {82..85 -contains $_}  {$RingMedium = "Wizardry (I)"}
+        {86..90 -contains $_}  {$RingMedium = "Evasion"}
+        {91..93 -contains $_}  {$RingMedium = "X-ray vision"}
+        {94..97 -contains $_}  {$RingMedium = "Blinking"}
+        {98..100 -contains $_} {$RingMedium = "Energy resistance, major"}
+    } #End Switch
+    return $RingMedium
+} #End function Get-DNDRingMedium
+
+Function Get-DNDRingMajor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..02 -contains $_} {$RingMajor = "Energy resistance, minor"}
+        {03..07 -contains $_} {$RingMajor = "Protection +3"}
+        {08..10 -contains $_} {$RingMajor = "Spell storing, minor"}
+        {11..15 -contains $_} {$RingMajor = "Invisibility"}
+        {16..19 -contains $_} {$RingMajor = "Wizardry (I)"}
+        {20..25 -contains $_} {$RingMajor = "Evasion"}
+        {26..28 -contains $_} {$RingMajor = "X-ray vision"}
+        {29..32 -contains $_} {$RingMajor = "Blinking"}
+        {33..39 -contains $_} {$RingMajor = "Energy resistance, major"}
+        {40..49 -contains $_} {$RingMajor = "Protection +4"}
+        {50..55 -contains $_} {$RingMajor = "Wizardry (II)"}
+        {56..60 -contains $_} {$RingMajor = "Freedom of movement"}
+        {61..63 -contains $_} {$RingMajor = "Energy resistance, greater"}
+        {64..65 -contains $_} {$RingMajor = "Friend shield (pair)"}
+        {66..70 -contains $_} {$RingMajor = "Protection +5"}
+        {71..74 -contains $_} {$RingMajor = "Shooting stars"}
+        {75..79 -contains $_} {$RingMajor = "Spell storing"}
+        {80..83 -contains $_} {$RingMajor = "Wizardry (III)"}
+        {84..86 -contains $_} {$RingMajor = "Telekinesis"}
+        {87..88 -contains $_} {$RingMajor = "Regeneration"}
+        {89..91 -contains $_} {$RingMajor = "Spell turning"}
+        {92..93 -contains $_} {$RingMajor = "Wizardry (IV)"}
+        {94 -contains $_}     {$RingMajor = "Three wishes"}
+        {95 -contains $_}     {$RingMajor = "Djinni calling"}
+        {96 -contains $_}     {$RingMajor = "Elemental command (air)"}
+        {97 -contains $_}     {$RingMajor = "Elemental command (earth)"}
+        {98 -contains $_}     {$RingMajor = "Elemental command (fire)"}
+        {99 -contains $_}     {$RingMajor = "Elemental command (water)"}
+        {100 -contains $_}    {$RingMajor = "Spell storing, major"}
+    } #End Switch
+    return $RingMajor
+} #End function Get-DNDRingMajor
 
 Function Get-DNDWondrousItemMinor {
     $WondrousItemList = @(
@@ -734,8 +828,7 @@ If ($Item.BaseItem -eq "armor or shield") {
     If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRandomArmorMinor -Dieroll $Die}
     If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDRandomArmorMedium -Dieroll $Die}
     If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDRandomArmorMajor -Dieroll $Die}
-
-
+    
     #User feedback
     Write-Host "Je itemtype is: " -NoNewline
     Write-Host "$($Item.BaseItem)" -ForegroundColor Cyan #Yellow
@@ -831,6 +924,15 @@ If ($Item.BaseItem -eq "armor or shield") {
 #-------------------------
 #region rings
 #-------------------------
+If ($Item.BaseItem -eq "ring") {
+    #Search through the table of items, getting the correct table from the previous roll
+    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol voor wat voor ring was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
+    If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor wat voor ring. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+    
+    If ($ItemPower -eq "minor")  {$Item.BaseItem = "Ring of " + (Get-DNDRingMinor -Dieroll $Die)}
+    If ($ItemPower -eq "medium") {$Item.BaseItem = "Ring of " + (Get-DNDRingMedium -Dieroll $Die)}
+    If ($ItemPower -eq "major")  {$Item.BaseItem = "Ring of " + (Get-DNDRingMajor -Dieroll $Die)}
+}
 #endregion rings
 
 #-------------------------
