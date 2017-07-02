@@ -15,7 +15,6 @@
 .TO DO
     Add tables for weapons
     Add tables for potions
-    Add tables for rods
     Add tables for scrolls
     Add tables for wands
     Add script switches -auto (never ask anything) and -# (to generate # items in one run)
@@ -448,6 +447,72 @@ Function Get-DNDRingMajor {
     return $RingMajor
 } #End function Get-DNDRingMajor
 
+Function Get-DNDRodMedium {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..07 -contains $_}  {$RodMedium = "Metamagic, Enlarge, lesser"}
+        {08..14 -contains $_}  {$RodMedium = "Metamagic, Extend, lesser"}
+        {15..21 -contains $_}  {$RodMedium = "Metamagic, Silent, lesser"}
+        {22..28 -contains $_}  {$RodMedium = "Immovable"}
+        {29..35 -contains $_}  {$RodMedium = "Metamagic, Empower, lesser"}
+        {36..42 -contains $_}  {$RodMedium = "Metal and mineral detection"}
+        {43..53 -contains $_}  {$RodMedium = "Cancellation"}
+        {54..57 -contains $_}  {$RodMedium = "Metamagic, Enlarge"}
+        {58..61 -contains $_}  {$RodMedium = "Metamagic, Extend"}
+        {62..65 -contains $_}  {$RodMedium = "Metamagic, Silent"}
+        {66..71 -contains $_}  {$RodMedium = "Wonder"}
+        {72..79 -contains $_}  {$RodMedium = "Python"}
+        {80..83 -contains $_}  {$RodMedium = "Metamagic, Maximize, lesser"}
+        {84..89 -contains $_}  {$RodMedium = "Flame extinguishing"}
+        {90..97 -contains $_}  {$RodMedium = "Viper"}
+        {98..99 -contains $_}  {$RodMedium = "Metamagic, Empower"}
+        {100    -contains $_}  {$RodMedium = "Metamagic, Quicken, lesser"}
+    } #End Switch
+    return $RodMedium
+} #End function Get-DNDRodMedium
+
+Function Get-DNDRodMajor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..04 -contains $_} {$RodMajor = "Cancellation"}
+        {05..06 -contains $_} {$RodMajor = "Metamagic, Enlarge"}
+        {07..08 -contains $_} {$RodMajor = "Metamagic, Extend"}
+        {09..10 -contains $_} {$RodMajor = "Metamagic, Silent"}
+        {11..14 -contains $_} {$RodMajor = "Wonder"}
+        {15..19 -contains $_} {$RodMajor = "Python"}
+        {20..21 -contains $_} {$RodMajor = "Flame extinguishing"}
+        {22..25 -contains $_} {$RodMajor = "Viper"}
+        {26..30 -contains $_} {$RodMajor = "Enemy detection"}
+        {31..36 -contains $_} {$RodMajor = "Metamagic, Enlarge, greater"}
+        {37..42 -contains $_} {$RodMajor = "Metamagic, Extend, greater"}
+        {43..48 -contains $_} {$RodMajor = "Metamagic, Silent, greater"}
+        {49..53 -contains $_} {$RodMajor = "Splendor"}
+        {54..58 -contains $_} {$RodMajor = "Withering"}
+        {59..64 -contains $_} {$RodMajor = "Metamagic, Empower"}
+        {65..69 -contains $_} {$RodMajor = "Thunder and lightning"}
+        {70..73 -contains $_} {$RodMajor = "Metamagic, Quicken, lesser"}
+        {74..77 -contains $_} {$RodMajor = "Negation"}
+        {78..80 -contains $_} {$RodMajor = "Absorption"}
+        {81..84 -contains $_} {$RodMajor = "Flailing"}
+        {85..86 -contains $_} {$RodMajor = "Metamagic, Maximize"}
+        {87..88 -contains $_} {$RodMajor = "Rulership"}
+        {89..90 -contains $_} {$RodMajor = "Security"}
+        {91..92 -contains $_} {$RodMajor = "Lordly might"}
+        {93..94 -contains $_} {$RodMajor = "Metamagic, Empower, greater"}
+        {95..96 -contains $_} {$RodMajor = "Metamagic, Quicken"}
+        {97..98 -contains $_} {$RodMajor = "Alertness"}
+        {99     -contains $_} {$RodMajor = "Metamagic, Maximize, greater"}
+        {100    -contains $_} {$RodMajor = "Metamagic, Quicken, greater"}
+    } #End Switch
+    return $RodMajor
+} #End function Get-DNDRodMajor
+
 Function Get-DNDStaffMedium {
     param (
         $Dieroll
@@ -843,11 +908,12 @@ do {$ItemPower = Read-Host "Wil je een minor, medium of major item?"
 
 #endregion set-up questions
 
+
 #-------------------------
 #region eerste rol: bepalen van item type
 #-------------------------
 #Roll the die and get the appropriate item type from the specified table
-If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol voor het itemtype was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
+If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
 If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor het itemtype. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
 
 If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRandomItemTypeMinor -Dieroll $Die}
@@ -855,8 +921,10 @@ If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDRandomItemTypeMedium -Dier
 If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDRandomItemTypeMajor -Dieroll $Die}
 
 #User feedback
-Write-Host "Je itemtype is: " -NoNewline
-Write-Host "$($Item.BaseItem)" -ForegroundColor Cyan
+If ($Automatic -eq $False) {
+    Write-Host "Je itemtype is: " -NoNewline
+    Write-Host "$($Item.BaseItem)" -ForegroundColor Cyan
+}
 #endregion eerste rol
 
 
@@ -864,12 +932,13 @@ Write-Host "$($Item.BaseItem)" -ForegroundColor Cyan
 #region tweede rol en verder: item bepalen
 #-------------------------
 
+
 #-------------------------
 #region armors and shields
 #-------------------------
 If ($Item.BaseItem -eq "armor or shield") {
     #Search through the table of items, getting the correct table from the previous roll
-    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol voor wat voor pantser/schild was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
+    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
     If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor wat voor pantser/schild. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
     
     If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRandomArmorMinor -Dieroll $Die}
@@ -886,7 +955,7 @@ If ($Item.BaseItem -eq "armor or shield") {
         $I = 1
 
         #Get dieroll for the armor type
-        If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol voor het armor of shield was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow }
+        If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
         If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol nogmaals 1d100 voor het armor of shield. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
         #Determine armor type
@@ -895,7 +964,7 @@ If ($Item.BaseItem -eq "armor or shield") {
         If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDRandomArmorMajor -Dieroll $Die}
 
         #Get dieroll for the armor ability
-        If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol voor de ability was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow  }
+        If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
         If ($Automatic -eq $False) {$Die = Read-Host "Rol 1d100 voor de ability. Wat rolde je?"}
 
         #Determine armor ability
@@ -911,7 +980,7 @@ If ($Item.BaseItem -eq "armor or shield") {
             #Keep rolling until there are no more rerolls
             While ($Rolls -ne 0) {
                 #Get dieroll for the armor ability 1
-                If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol voor de volgende ability was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
+                If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
                 If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor de volgende ability. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
                 If ($Die -eq 100) {$Rolls += 2} #Rolling 100 means getting two extra rolls (one of which is always done, so only +1 to the counter)
 
@@ -931,7 +1000,7 @@ If ($Item.BaseItem -eq "armor or shield") {
 
     If ($Item.BaseItem -eq "specific armor") {
         #Get dieroll for the specific armor
-        If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je krijgt een specifiek pantser. Je dobbelsteenrol hiervoor is " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
+        If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
         If ($Automatic -eq $False) {Do {$Die = Read-Host "Je krijgt een specifiek pantser. Rol 1d100. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
 
         #Determine the specific armor
@@ -944,7 +1013,7 @@ If ($Item.BaseItem -eq "armor or shield") {
         #Set this thing to use at end presentation
         
         #Get dieroll for the specific shield
-        If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je krijgt een specifiek schild. Je dobbelsteenrol hiervoor is " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
+        If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
         If ($Automatic -eq $False) {Do {$Die = Read-Host "Je krijgt een specifiek schild. Rol 1d100. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
 
         #Determine the specific shield
@@ -958,22 +1027,25 @@ If ($Item.BaseItem -eq "armor or shield") {
 
 #endregion armors and shields
 
+
 #-------------------------
 #region weapons
 #-------------------------
 #endregion weapons
+
 
 #-------------------------
 #region potions
 #-------------------------
 #endregion potions
 
+
 #-------------------------
 #region rings
 #-------------------------
 If ($Item.BaseItem -eq "ring") {
     #Search through the table of items, getting the correct table from the previous roll
-    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol voor wat voor ring was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
+    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
     If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor wat voor ring. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
     
     If ($ItemPower -eq "minor")  {$Item.BaseItem = "Ring of " + (Get-DNDRingMinor -Dieroll $Die)}
@@ -982,17 +1054,33 @@ If ($Item.BaseItem -eq "ring") {
 }
 #endregion rings
 
+
+#-------------------------
+#region rods
+#-------------------------
+If ($Item.BaseItem -eq "rod") {
+    #Search through the table of items, getting the correct table from the previous roll
+    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
+    If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor wat voor rod. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+    
+    If ($ItemPower -eq "medium") {$Item.BaseItem = "Rod of " + (Get-DNDRodMedium -Dieroll $Die)}
+    If ($ItemPower -eq "major")  {$Item.BaseItem = "Rod of " + (Get-DNDRodMajor -Dieroll $Die)}
+}
+#endregion rods
+
+
 #-------------------------
 #region scrolls
 #-------------------------
 #endregion scrolls
+
 
 #-------------------------
 #region staves
 #-------------------------
 If ($Item.BaseItem -eq "staff") {
     #Search through the table of items, getting the correct table from the previous roll
-    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101; Write-Host "Je dobbelsteenrol voor wat voor staff was " -NoNewline; Write-Host "$Die. " -ForegroundColor Yellow -NoNewline }
+    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
     If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor wat voor staff. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
     
     If ($ItemPower -eq "medium") {$Item.BaseItem = "Staff of " + (Get-DNDStaffMedium -Dieroll $Die)}
@@ -1000,10 +1088,12 @@ If ($Item.BaseItem -eq "staff") {
 }
 #endregion staves
 
+
 #-------------------------
 #region wands
 #-------------------------
 #endregion wands
+
 
 #-------------------------
 #region wondrous items
@@ -1013,12 +1103,10 @@ If ($Item.BaseItem -eq "wondrous item") {
     If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDWondrousItemMedium}
     If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDWondrousItemMajor}
 }
-#################################################################################FEEDBACK?
 #endregion wondrous items
 
-
-
 #endregion tweede rol
+
 
 #-------------------------
 #region user feedback
