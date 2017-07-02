@@ -13,8 +13,7 @@
 .EXAMPLE
     Just run PFLootGenerator.ps1 for now. Switches will be implemented in the future
 .TO DO
-    Add tables for weapons
-    Add tables for potions
+    Add functions and code for weapons
     Add script switches -auto (never ask anything) and -# (to generate # items in one run)
     Add spell lists for potions, scrolls and wands
 .To fix:
