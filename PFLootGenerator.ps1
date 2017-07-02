@@ -15,7 +15,6 @@
 .TO DO
     Add tables for weapons
     Add tables for potions
-    Add tables for scrolls
     Add tables for wands
     Add script switches -auto (never ask anything) and -# (to generate # items in one run)
 .To fix:
@@ -512,6 +511,50 @@ Function Get-DNDRodMajor {
     } #End Switch
     return $RodMajor
 } #End function Get-DNDRodMajor
+
+Function Get-DNDScrollMinor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..05 -contains $_}  {$ScrollMinor = "nulde"}
+        {06..50 -contains $_}  {$ScrollMinor = "eerste"}
+        {51..95 -contains $_}  {$ScrollMinor = "tweede"}
+        {96..100 -contains $_} {$ScrollMinor = "derde"}
+    } #End Switch
+    return $ScrollMinor
+} #End function Get-DNDScrollMinor
+
+Function Get-DNDScrollMedium {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..05 -contains $_}  {$ScrollMedium = "tweede"}
+        {06..65 -contains $_}  {$ScrollMedium = "derde"}
+        {66..95 -contains $_}  {$ScrollMedium = "vierde"}
+        {96..100 -contains $_}  {$ScrollMedium = "vijfde"}
+    } #End Switch
+    return $ScrollMedium
+} #End function Get-DNDScrollMedium
+
+Function Get-DNDScrollMajor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..05 -contains $_}  {$ScrollMajor = "vierde"}
+        {06..50 -contains $_}  {$ScrollMajor = "vijfde"}
+        {51..70 -contains $_}  {$ScrollMajor = "zesde"}
+        {71..85 -contains $_}  {$ScrollMajor = "zevende"}
+        {86..95 -contains $_}  {$ScrollMajor = "achtste"}
+        {96..100 -contains $_} {$ScrollMajor = "negende"}
+    } #End Switch
+    return $ScrollMajor
+} #End function Get-DNDScrollMajor
 
 Function Get-DNDStaffMedium {
     param (
@@ -1072,6 +1115,15 @@ If ($Item.BaseItem -eq "rod") {
 #-------------------------
 #region scrolls
 #-------------------------
+If ($Item.BaseItem -eq "scroll") {
+    #Search through the table of items, getting the correct table from the previous roll
+    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
+    If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor wat voor scroll. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+    
+    If ($ItemPower -eq "minor")  {$Item.BaseItem = "Scroll met " + (Get-DNDScrollMinor -Dieroll $Die) + " level spreuk"}
+    If ($ItemPower -eq "medium") {$Item.BaseItem = "Scroll met " + (Get-DNDScrollMedium -Dieroll $Die) + " level spreuk"}
+    If ($ItemPower -eq "major")  {$Item.BaseItem = "Scroll met " + (Get-DNDScrollMajor -Dieroll $Die) + " level spreuk"}
+}
 #endregion scrolls
 
 
