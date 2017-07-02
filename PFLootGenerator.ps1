@@ -15,8 +15,8 @@
 .TO DO
     Add tables for weapons
     Add tables for potions
-    Add tables for wands
     Add script switches -auto (never ask anything) and -# (to generate # items in one run)
+    Add spell lists for potions, scrolls and wands
 .To fix:
     items other than armor/shield with a bonus (e.g. +1) show the bonus two times
 #>
@@ -352,6 +352,44 @@ Function Get-DNDSpecificShieldMajor {
     return $SpecificShieldMajor
 } #End function Get-DNDSpecificShieldMajor
 
+Function Get-DNDPotionMinor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..20 -contains $_}  {$PotionMinor = "nulde"}
+        {21..60 -contains $_}  {$PotionMinor = "eerste"}
+        {61..100 -contains $_} {$PotionMinor = "tweede"}
+    } #End Switch
+    return $PotionMinor
+} #End function Get-DNDPotionMinor
+
+Function Get-DNDPotionMedium {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..20 -contains $_}  {$PotionMedium = "eerste"}
+        {21..60 -contains $_}  {$PotionMedium = "tweede"}
+        {61..100 -contains $_} {$PotionMedium = "derde"}
+    } #End Switch
+    return $PotionMedium
+} #End function Get-DNDPotionMedium
+
+Function Get-DNDPotionMajor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..20 -contains $_}  {$PotionMajor = "tweede"}
+        {21..100 -contains $_} {$PotionMajor = "derde"}
+    } #End Switch
+    return $PotionMajor
+} #End function Get-DNDPotionMajor
+
 Function Get-DNDRingMinor {
     param (
         $Dieroll
@@ -604,6 +642,43 @@ Function Get-DNDStaffMajor {
     } #End Switch
     return $StaffMajor
 } #End function Get-DNDStaffMajor
+
+Function Get-DNDWandMinor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..05 -contains $_}  {$WandMinor = "nulde"}
+        {06..60 -contains $_}  {$WandMinor = "eerste"}
+        {61..100 -contains $_} {$WandMinor = "tweede"}
+    } #End Switch
+    return $WandMinor
+} #End function Get-DNDWandMinor
+
+Function Get-DNDWandMedium {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..60 -contains $_}  {$WandMedium = "tweede"}
+        {61..100 -contains $_} {$WandMedium = "derde"}
+    } #End Switch
+    return $WandMedium
+} #End function Get-DNDWandMedium
+
+Function Get-DNDWandMajor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..60 -contains $_}  {$WandMajor = "derde"}
+        {61..100 -contains $_} {$WandMajor = "vierde"}
+    } #End Switch
+    return $WandMajor
+} #End function Get-DNDWandMajor
 
 Function Get-DNDWondrousItemMinor {
     $WondrousItemList = @(
@@ -1080,6 +1155,15 @@ If ($Item.BaseItem -eq "armor or shield") {
 #-------------------------
 #region potions
 #-------------------------
+If ($Item.BaseItem -eq "potion") {
+    #Search through the table of items, getting the correct table from the previous roll
+    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
+    If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor wat voor potion. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+    
+    If ($ItemPower -eq "minor")  {$Item.BaseItem = "Potion met " + (Get-DNDPotionMinor -Dieroll $Die) + " level spreuk"}
+    If ($ItemPower -eq "medium") {$Item.BaseItem = "Potion met " + (Get-DNDPotionMedium -Dieroll $Die) + " level spreuk"}
+    If ($ItemPower -eq "major")  {$Item.BaseItem = "Potion met " + (Get-DNDPotionMajor -Dieroll $Die) + " level spreuk"}
+}
 #endregion potions
 
 
@@ -1144,6 +1228,16 @@ If ($Item.BaseItem -eq "staff") {
 #-------------------------
 #region wands
 #-------------------------
+If ($Item.BaseItem -eq "wand") {
+    #Search through the table of items, getting the correct table from the previous roll
+    If ($Automatic -eq $True) {$Die = Get-Random -Minimum 1 -Maximum 101}
+    If ($Automatic -eq $False) {Do {$Die = Read-Host "Rol 1d100 voor wat voor wand. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+    
+    If ($ItemPower -eq "minor")  {$Item.BaseItem = "Wand met " + (Get-DNDScrollMinor -Dieroll $Die) + " level spreuk"}
+    If ($ItemPower -eq "medium") {$Item.BaseItem = "Wand met " + (Get-DNDScrollMedium -Dieroll $Die) + " level spreuk"}
+    If ($ItemPower -eq "major")  {$Item.BaseItem = "Wand met " + (Get-DNDScrollMajor -Dieroll $Die) + " level spreuk"}
+    $Item.WandCharges = Get-Random -Minimum 1 -Maximum 51
+}
 #endregion wands
 
 
@@ -1186,7 +1280,8 @@ Write-Host "`n`r============================================================="
 Write-Host "Je item is: " -NoNewLine
 Write-Host "$($Item.BaseItem) " -ForegroundColor Green -NoNewline
 If ($Item.ItemBonus) {Write-Host "$($Item.ItemBonus) " -ForegroundColor Green -nonewline}
-If ($Item.SpecialAbility) {Write-Host " met " -NoNewLine; Write-Host ($Item.SpecialAbility -join ", ") -ForegroundColor Green}
+If ($Item.SpecialAbility) {Write-Host "met " -NoNewLine; Write-Host ($Item.SpecialAbility -join ", ") -ForegroundColor Green}
+If ($Item.WandCharges) {Write-Host "en $($Item.WandCharges) charges" -ForegroundColor Green}
 
 #endregion user feedback
 
