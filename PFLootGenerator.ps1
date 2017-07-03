@@ -19,12 +19,13 @@
     Shortest syntax: PFLootGenerator.ps1
     This will give you one minor item without further required input
 .TO DO
-    Add functions and code for weapons
+    Add functions and code for special ability of weapons
     Add spell lists for potions, scrolls and wands
     Remove duplicate powers on items that have them
 .To fix:
     items other than armor/shield with a bonus (e.g. +1) show the bonus two times
     Multiple special abilities aren't joined with a comma and a space, which they should be
+    Make armor code like weapon code, considering the armor type
 #>
 
 #This script generates a random piece of loot, according to the random tables in the Pathfinder Core Rulebook
@@ -364,6 +365,211 @@ Function Get-DNDSpecificShieldMajor {
     } #End Switch
     return $SpecificShieldMajor
 } #End function Get-DNDSpecificShieldMajor
+
+Function Get-DNDRandomWeaponMinor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {1..70 -contains $_}   {$WeaponMinor = "+1"}
+        {71..85 -contains $_}  {$WeaponMinor = "+2"}
+        {86..90 -contains $_}  {$WeaponMinor = "Specific weapon"}
+        {91..100 -contains $_} {$WeaponMinor = "Special ability and roll again"}
+    } #End Switch
+    return $WeaponMinor
+} #End function Get-DNDRandomWeaponMinor
+
+Function Get-DNDRandomWeaponMedium {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {1..10 -contains $_}   {$WeaponMedium = "+1"}
+        {11..29 -contains $_}  {$WeaponMedium = "+2"}
+        {30..58 -contains $_}  {$WeaponMedium = "+3"}
+        {59..62 -contains $_}  {$WeaponMedium = "+4"}
+        {63..68 -contains $_}  {$WeaponMedium = "Specific weapon"}
+        {69..100 -contains $_} {$WeaponMedium = "Special ability and roll again"}
+    } #End Switch
+    return $WeaponMedium
+} #End function Get-DNDRandomWeaponMedium
+
+Function Get-DNDRandomWeaponMajor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..20 -contains $_}  {$WeaponMajor = "+3"}
+        {21..38 -contains $_}  {$WeaponMajor = "+4"}
+        {39..49 -contains $_}  {$WeaponMajor = "+5"}
+        {50..63 -contains $_}  {$WeaponMajor = "Specific weapon"}
+        {64..100 -contains $_} {$WeaponMajor = "Special ability and roll again"}
+    } #End Switch
+    return $WeaponMajor
+} #End function Get-DNDRandomWeaponMajor
+
+Function Get-DNDWeaponType {
+    $WeaponTypeList = @(
+        "Axe, orc double"
+        "Axe, throwing"
+        "Battleaxe"
+        "Chain, spiked"
+        "Club"
+        "Curve blade, elven"
+        "Dagger"
+        "Dagger, punching"
+        "Falchion"
+        "Flail"
+        "Flail, dire"
+        "Flail, heavy"
+        "Gauntlet"
+        "Gauntlet, spiked"
+        "Glaive"
+        "Greataxe"
+        "Greatclub"
+        "Greatsword"
+        "Guisarme"
+        "Halberd"
+        "Hammer, gnome hooked"
+        "Hammer, light"
+        "Handaxe"
+        "Kama"
+        "Kukri"
+        "Lance"
+        "Longspear"
+        "Longsword"
+        "Mace, heavy"
+        "Mace, light"
+        "Morningstar"
+        "Nunchaku"
+        "Pick, heavy"
+        "Pick, light"
+        "Quarterstaff"
+        "Ranseur"
+        "Rapier"
+        "Sai"
+        "Sap"
+        "Scimitar"
+        "Scythe"
+        "Shortspear"
+        "Siangham"
+        "Sickle"
+        "Spear"
+        "Starknife"
+        "Sword, bastard"
+        "Sword, short"
+        "Sword, two-bladed"
+        "Trident"
+        "Unarmed strike"
+        "Urgrosh, dwarven"
+        "Waraxe, dwarven"
+        "Warhammer"
+        "Whip"
+        #Ranged weapons from here, if you even need to separate
+        "Blowgun"
+        "Bolas"
+        "Crossbow, hand"
+        "Crossbow, heavy"
+        "Crossbow, light"
+        "Crossbow, repeating heavy"
+        "Crossbow, repeating light"
+        "Dart"
+        "Darts, blowgun"
+        "Javelin"
+        "Longbow"
+        "Longbow, composite"
+        "Net"
+        "Shortbow"
+        "Shortbow, composite"
+        "Shuriken"
+        "Sling"
+        "Sling staff, halfling"
+    ) #End ItemList
+    
+    $WeaponType = $WeaponTypeList | Get-Random
+    return $WeaponType
+} #End function Get-DNDWeaponType
+
+Function Get-DNDSpecificWeaponMinor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..15 -contains $_}  {$SpecificWeaponMinor = "Sleep arrow"}
+        {16..25 -contains $_}  {$SpecificWeaponMinor = "Screaming bolt"}
+        {26..45 -contains $_}  {$SpecificWeaponMinor = "Silver dagger, masterwork"}
+        {46..65 -contains $_}  {$SpecificWeaponMinor = "Cold iron longsword, masterwork"}
+        {66..75 -contains $_}  {$SpecificWeaponMinor = "Javelin of lightning"}
+        {76..80 -contains $_}  {$SpecificWeaponMinor = "Slaying arrow"}
+        {81..90 -contains $_}  {$SpecificWeaponMinor = "Adamantine dagger"}
+        {91..100 -contains $_} {$SpecificWeaponMinor = "Adamantine battleaxe"}
+    } #End Switch
+    return $SpecificWeaponMinor
+} #End function Get-DNDSpecificWeaponMinor
+
+Function Get-DNDSpecificWeaponMedium {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..09 -contains $_}  {$SpecificWeaponMedium = "Javelin of lightning"}
+        {10..15 -contains $_}  {$SpecificWeaponMedium = "Slaying arrow"}
+        {16..24 -contains $_}  {$SpecificWeaponMedium = "Adamantine dagger"}
+        {25..33 -contains $_}  {$SpecificWeaponMedium = "Adamantine battleaxe"}
+        {34..37 -contains $_}  {$SpecificWeaponMedium = "Slaying arrow (greater)"}
+        {38..40 -contains $_}  {$SpecificWeaponMedium = "Shatterspike"}
+        {41..46 -contains $_}  {$SpecificWeaponMedium = "Dagger of venom"}
+        {47..51 -contains $_}  {$SpecificWeaponMedium = "Trident of warning"}
+        {52..57 -contains $_}  {$SpecificWeaponMedium = "Assassin’s dagger"}
+        {58..62 -contains $_}  {$SpecificWeaponMedium = "Shifter’s sorrow"}
+        {63..66 -contains $_}  {$SpecificWeaponMedium = "Trident of fish command"}
+        {67..74 -contains $_}  {$SpecificWeaponMedium = "Flame tongue"}
+        {75..79 -contains $_}  {$SpecificWeaponMedium = "Luck blade (0 wishes)"}
+        {80..86 -contains $_}  {$SpecificWeaponMedium = "Sword of subtlety"}
+        {87..91 -contains $_}  {$SpecificWeaponMedium = "Sword of the planes"}
+        {92..95 -contains $_}  {$SpecificWeaponMedium = "Nine lives stealer"}
+        {96..98 -contains $_}  {$SpecificWeaponMedium = "Oathbow"}
+        {99..100 -contains $_} {$SpecificWeaponMedium = "Sword of life stealing"}
+    } #End Switch
+    return $SpecificWeaponMedium
+} #End function Get-DNDSpecificWeaponMedium
+
+Function Get-DNDSpecificWeaponMajor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..04 -contains $_} {$SpecificWeaponMajor = "Assassin’s dagger"}
+        {05..07 -contains $_} {$SpecificWeaponMajor = "Shifter’s sorrow"}
+        {08..09 -contains $_} {$SpecificWeaponMajor = "Trident of fish command"}
+        {10..13 -contains $_} {$SpecificWeaponMajor = "Flame tongue"}
+        {14..17 -contains $_} {$SpecificWeaponMajor = "Luck blade (0 wishes)"}
+        {18..24 -contains $_} {$SpecificWeaponMajor = "Sword of subtlety"}
+        {25..31 -contains $_} {$SpecificWeaponMajor = "Sword of the planes"}
+        {32..37 -contains $_} {$SpecificWeaponMajor = "Nine lives stealer"}
+        {38..42 -contains $_} {$SpecificWeaponMajor = "Oathbow"}
+        {43..46 -contains $_} {$SpecificWeaponMajor = "Sword of life stealing"}
+        {47..51 -contains $_} {$SpecificWeaponMajor = "Mace of terror"}
+        {52..57 -contains $_} {$SpecificWeaponMajor = "Life-drinker"}
+        {58..62 -contains $_} {$SpecificWeaponMajor = "Sylvan scimitar"}
+        {63..67 -contains $_} {$SpecificWeaponMajor = "Rapier of puncturing"}
+        {68..73 -contains $_} {$SpecificWeaponMajor = "Sun blade"}
+        {74..79 -contains $_} {$SpecificWeaponMajor = "Frost brand"}
+        {80..84 -contains $_} {$SpecificWeaponMajor = "Dwarven thrower"}
+        {85..91 -contains $_} {$SpecificWeaponMajor = "Luck blade (1 wish)"}
+        {92..95 -contains $_} {$SpecificWeaponMajor = "Mace of smiting"}
+        {96..97 -contains $_} {$SpecificWeaponMajor = "Luck blade (2 wishes)"}
+        {98..99 -contains $_} {$SpecificWeaponMajor = "Holy avenger"}
+        {100 -contains $_}    {$SpecificWeaponMajor = "Luck blade (3 wishes)"}
+    } #End Switch
+    return $SpecificWeaponMajor
+} #End function Get-DNDSpecificWeaponMajor
 
 Function Get-DNDPotionMinor {
     param (
@@ -1059,7 +1265,7 @@ If ($Number -eq 1) {
 
 
     #-------------------------
-    #region eerste rol: bepalen van item type
+    #region first roll: determine item type
     #-------------------------
     #Roll the die and get the appropriate item type from the specified table
     If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
@@ -1078,7 +1284,7 @@ If ($Number -eq 1) {
     
     
     #-------------------------
-    #region tweede rol en verder: item bepalen
+    #region second roll and further: determine item
     #-------------------------
     
     
@@ -1181,6 +1387,33 @@ If ($Number -eq 1) {
     #-------------------------
     #region weapons
     #-------------------------
+    If ($Item.BaseItem -eq "weapon") {
+        #Search through the table of items, getting the correct table from the previous roll
+        If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
+        If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 the kind of weapon. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+        
+        If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMinor -Dieroll $Die}
+        If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMedium -Dieroll $Die}
+        If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMajor -Dieroll $Die}
+        
+        #User feedback
+        If ($Manual -eq $True -and $Item.ItemBonus -ne "Specific Weapon") {
+            Write-Host "Je itemtype is: " -NoNewline
+            Write-Host "$($Item.BaseItem)" -ForegroundColor Cyan
+        }
+        If ($Item.ItemBonus -eq "Specific weapon") {
+            #Get dieroll for the specific armor
+            If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
+            If ($Manual -eq $True) {Do {$Die = Read-Host "You get a specific weapon. Rol 1d100. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+    
+            #Determine the specific armor
+            If ($ItemPower -eq "minor")  {$Item.SpecificItem = (Get-DNDSpecificWeaponMinor -Dieroll $Die)}
+            If ($ItemPower -eq "medium") {$Item.SpecificItem = (Get-DNDSpecificWeaponMedium -Dieroll $Die)}
+            If ($ItemPower -eq "major")  {$Item.SpecificItem = (Get-DNDSpecificWeaponMajor -Dieroll $Die)}
+        } #Endif specific armor
+
+    } #Endif weapon
+
     #endregion weapons
     
     
@@ -1293,6 +1526,7 @@ If ($Number -eq 1) {
     If ($Item.SpecificItem) {
         $Item.BaseItem = $Item.SpecificItem
         $Item.SpecialAbility = ""
+        $Item.ItemBonus = ""
     }
     
     #Extract the item bonus from the base item
