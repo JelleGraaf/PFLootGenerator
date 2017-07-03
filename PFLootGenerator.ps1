@@ -371,9 +371,9 @@ Function Get-DNDPotionMinor {
         )
 
     Switch ($Dieroll) {
-        {01..20 -contains $_}  {$PotionMinor = "nulde"}
-        {21..60 -contains $_}  {$PotionMinor = "eerste"}
-        {61..100 -contains $_} {$PotionMinor = "tweede"}
+        {01..20 -contains $_}  {$PotionMinor = "zero"}
+        {21..60 -contains $_}  {$PotionMinor = "first"}
+        {61..100 -contains $_} {$PotionMinor = "second"}
     } #End Switch
     return $PotionMinor
 } #End function Get-DNDPotionMinor
@@ -384,9 +384,9 @@ Function Get-DNDPotionMedium {
         )
 
     Switch ($Dieroll) {
-        {01..20 -contains $_}  {$PotionMedium = "eerste"}
-        {21..60 -contains $_}  {$PotionMedium = "tweede"}
-        {61..100 -contains $_} {$PotionMedium = "derde"}
+        {01..20 -contains $_}  {$PotionMedium = "first"}
+        {21..60 -contains $_}  {$PotionMedium = "second"}
+        {61..100 -contains $_} {$PotionMedium = "third"}
     } #End Switch
     return $PotionMedium
 } #End function Get-DNDPotionMedium
@@ -397,8 +397,8 @@ Function Get-DNDPotionMajor {
         )
 
     Switch ($Dieroll) {
-        {01..20 -contains $_}  {$PotionMajor = "tweede"}
-        {21..100 -contains $_} {$PotionMajor = "derde"}
+        {01..20 -contains $_}  {$PotionMajor = "second"}
+        {21..100 -contains $_} {$PotionMajor = "third"}
     } #End Switch
     return $PotionMajor
 } #End function Get-DNDPotionMajor
@@ -569,10 +569,10 @@ Function Get-DNDScrollMinor {
         )
 
     Switch ($Dieroll) {
-        {01..05 -contains $_}  {$ScrollMinor = "nulde"}
-        {06..50 -contains $_}  {$ScrollMinor = "eerste"}
-        {51..95 -contains $_}  {$ScrollMinor = "tweede"}
-        {96..100 -contains $_} {$ScrollMinor = "derde"}
+        {01..05 -contains $_}  {$ScrollMinor = "zero"}
+        {06..50 -contains $_}  {$ScrollMinor = "first"}
+        {51..95 -contains $_}  {$ScrollMinor = "second"}
+        {96..100 -contains $_} {$ScrollMinor = "third"}
     } #End Switch
     return $ScrollMinor
 } #End function Get-DNDScrollMinor
@@ -583,10 +583,10 @@ Function Get-DNDScrollMedium {
         )
 
     Switch ($Dieroll) {
-        {01..05 -contains $_}  {$ScrollMedium = "tweede"}
-        {06..65 -contains $_}  {$ScrollMedium = "derde"}
-        {66..95 -contains $_}  {$ScrollMedium = "vierde"}
-        {96..100 -contains $_}  {$ScrollMedium = "vijfde"}
+        {01..05 -contains $_}  {$ScrollMedium = "second"}
+        {06..65 -contains $_}  {$ScrollMedium = "third"}
+        {66..95 -contains $_}  {$ScrollMedium = "fourth"}
+        {96..100 -contains $_} {$ScrollMedium = "fifth"}
     } #End Switch
     return $ScrollMedium
 } #End function Get-DNDScrollMedium
@@ -597,12 +597,12 @@ Function Get-DNDScrollMajor {
         )
 
     Switch ($Dieroll) {
-        {01..05 -contains $_}  {$ScrollMajor = "vierde"}
-        {06..50 -contains $_}  {$ScrollMajor = "vijfde"}
-        {51..70 -contains $_}  {$ScrollMajor = "zesde"}
-        {71..85 -contains $_}  {$ScrollMajor = "zevende"}
-        {86..95 -contains $_}  {$ScrollMajor = "achtste"}
-        {96..100 -contains $_} {$ScrollMajor = "negende"}
+        {01..05 -contains $_}  {$ScrollMajor = "fourth"}
+        {06..50 -contains $_}  {$ScrollMajor = "fifth"}
+        {51..70 -contains $_}  {$ScrollMajor = "sixth"}
+        {71..85 -contains $_}  {$ScrollMajor = "seventh"}
+        {86..95 -contains $_}  {$ScrollMajor = "eighth"}
+        {96..100 -contains $_} {$ScrollMajor = "ninth"}
     } #End Switch
     return $ScrollMajor
 } #End function Get-DNDScrollMajor
@@ -662,9 +662,9 @@ Function Get-DNDWandMinor {
         )
 
     Switch ($Dieroll) {
-        {01..05 -contains $_}  {$WandMinor = "nulde"}
-        {06..60 -contains $_}  {$WandMinor = "eerste"}
-        {61..100 -contains $_} {$WandMinor = "tweede"}
+        {01..05 -contains $_}  {$WandMinor = "zero"}
+        {06..60 -contains $_}  {$WandMinor = "first"}
+        {61..100 -contains $_} {$WandMinor = "second"}
     } #End Switch
     return $WandMinor
 } #End function Get-DNDWandMinor
@@ -675,8 +675,8 @@ Function Get-DNDWandMedium {
         )
 
     Switch ($Dieroll) {
-        {01..60 -contains $_}  {$WandMedium = "tweede"}
-        {61..100 -contains $_} {$WandMedium = "derde"}
+        {01..60 -contains $_}  {$WandMedium = "second"}
+        {61..100 -contains $_} {$WandMedium = "third"}
     } #End Switch
     return $WandMedium
 } #End function Get-DNDWandMedium
@@ -687,8 +687,8 @@ Function Get-DNDWandMajor {
         )
 
     Switch ($Dieroll) {
-        {01..60 -contains $_}  {$WandMajor = "derde"}
-        {61..100 -contains $_} {$WandMajor = "vierde"}
+        {01..60 -contains $_}  {$WandMajor = "third"}
+        {61..100 -contains $_} {$WandMajor = "fourth"}
     } #End Switch
     return $WandMajor
 } #End function Get-DNDWandMajor
@@ -1025,8 +1025,6 @@ Function Get-DNDWondrousItemMajor {
 #region Header
 #-------------------------
 Clear-Host
-#Check to see if $N
-
 
 #Give feedback to user when $ItemPower isn't specified
 If ($ItemPower -eq "minor" -or $ItemPower -eq "medium" -or $ItemPower -eq "major") { 
@@ -1036,9 +1034,9 @@ If ($ItemPower -eq "minor" -or $ItemPower -eq "medium" -or $ItemPower -eq "major
 
 #Give an overview of what is going to happen next
 If ($Number -eq 1) {
-    Write-Host "Je krijgt $Number $ItemPower item:"
+    Write-Host "You will get $Number $ItemPower item:"
 } Else {
-    Write-Host "Je krijgt $Number $ItemPower items:"
+    Write-Host "You will get $Number $ItemPower items:"
 
 }
 #endregion header
@@ -1065,7 +1063,7 @@ If ($Number -eq 1) {
     #-------------------------
     #Roll the die and get the appropriate item type from the specified table
     If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-    If ($Manual -eq $True) {Do {$Die = Read-Host "Rol 1d100 voor het itemtype. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+    If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 for the item type. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
     
     If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRandomItemTypeMinor -Dieroll $Die}
     If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDRandomItemTypeMedium -Dieroll $Die}
@@ -1090,7 +1088,7 @@ If ($Number -eq 1) {
     If ($Item.BaseItem -eq "armor or shield") {
         #Search through the table of items, getting the correct table from the previous roll
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-        If ($Manual -eq $True) {Do {$Die = Read-Host "Rol 1d100 voor wat voor pantser/schild. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+        If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 the kind of armor or shield. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
         If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRandomArmorMinor -Dieroll $Die}
         If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDRandomArmorMedium -Dieroll $Die}
@@ -1104,12 +1102,12 @@ If ($Number -eq 1) {
     
         #In lucky cases, roll extra for special abilities
         While ($Item.BaseItem -eq "special ability and roll again") {
-            If ($Manual -eq $True) {Write-Host "Je hebt gelukt, je mag twee keer extra rollen!"}
+            If ($Manual -eq $True) {Write-Host "Lucky! Roll twice again"}
             $I = 1
     
             #Get dieroll for the armor type
             If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-            If ($Manual -eq $True) {Do {$Die = Read-Host "Rol nogmaals 1d100 voor het armor of shield. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+            If ($Manual -eq $True) {Do {$Die = Read-Host "Roll  1d100 again for the armor or shield. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
             
             #Determine armor type
             If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRandomArmorMinor -Dieroll $Die}
@@ -1118,7 +1116,7 @@ If ($Number -eq 1) {
     
             #Get dieroll for the armor ability
             If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-            If ($Manual -eq $True) {$Die = Read-Host "Rol 1d100 voor de ability. Wat rolde je?"}
+            If ($Manual -eq $True) {$Die = Read-Host "Roll 1d100 for the ability. what is the result of the die roll?"}
     
             #Determine armor ability
             If ($ItemPower -eq "minor")  {$Item.SpecialAbility += Get-DNDRandomArmorAbilityMinor -Dieroll $Die}
@@ -1128,13 +1126,13 @@ If ($Number -eq 1) {
             #In very lucky cases, roll extra for more special abilities
             If ($Item.SpecialAbility -eq "roll twice again") {
                 $Rolls = 2
-                Write-Host "Jeetje, it's your lucky day! Je mag nóg eens extra rollen voor special abilities!"
+                Write-Host "This is your lucky day! Roll twice again for special abilities!"
     
                 #Keep rolling until there are no more rerolls
                 While ($Rolls -ne 0) {
                     #Get dieroll for the armor ability 1
                     If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-                    If ($Manual -eq $True) {Do {$Die = Read-Host "Rol 1d100 voor de volgende ability. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+                    If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 for the next ability. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
                     If ($Die -eq 100) {$Rolls += 2} #Rolling 100 means getting two extra rolls (one of which is always done, so only +1 to the counter)
     
                     #Determine extra ability 
@@ -1154,7 +1152,7 @@ If ($Number -eq 1) {
         If ($Item.BaseItem -eq "specific armor") {
             #Get dieroll for the specific armor
             If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-            If ($Manual -eq $True) {Do {$Die = Read-Host "Je krijgt een specifiek pantser. Rol 1d100. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+            If ($Manual -eq $True) {Do {$Die = Read-Host "You get a specific armor. Rol 1d100. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
     
             #Determine the specific armor
             If ($ItemPower -eq "minor")  {$Item.SpecificItem = (Get-DNDSpecificArmorMinor -Dieroll $Die)}
@@ -1167,7 +1165,7 @@ If ($Number -eq 1) {
             
             #Get dieroll for the specific shield
             If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-            If ($Manual -eq $True) {Do {$Die = Read-Host "Je krijgt een specifiek schild. Rol 1d100. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+            If ($Manual -eq $True) {Do {$Die = Read-Host "You get a specific shield. Rol 1d100. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
     
             #Determine the specific shield
             If ($ItemPower -eq "minor")  {$Item.SpecificItem = (Get-DNDSpecificShieldMinor -Dieroll $Die) }
@@ -1192,7 +1190,7 @@ If ($Number -eq 1) {
     If ($Item.BaseItem -eq "potion") {
         #Search through the table of items, getting the correct table from the previous roll
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-        If ($Manual -eq $True) {Do {$Die = Read-Host "Rol 1d100 voor wat voor potion. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+        If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 for what kind of potion. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
         If ($ItemPower -eq "minor")  {$Item.BaseItem = "Potion met " + (Get-DNDPotionMinor -Dieroll $Die) + " level spreuk"}
         If ($ItemPower -eq "medium") {$Item.BaseItem = "Potion met " + (Get-DNDPotionMedium -Dieroll $Die) + " level spreuk"}
@@ -1207,7 +1205,7 @@ If ($Number -eq 1) {
     If ($Item.BaseItem -eq "ring") {
         #Search through the table of items, getting the correct table from the previous roll
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-        If ($Manual -eq $True) {Do {$Die = Read-Host "Rol 1d100 voor wat voor ring. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+        If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 for what kind of ring ring. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
         If ($ItemPower -eq "minor")  {$Item.BaseItem = "Ring of " + (Get-DNDRingMinor -Dieroll $Die)}
         If ($ItemPower -eq "medium") {$Item.BaseItem = "Ring of " + (Get-DNDRingMedium -Dieroll $Die)}
@@ -1222,7 +1220,7 @@ If ($Number -eq 1) {
     If ($Item.BaseItem -eq "rod") {
         #Search through the table of items, getting the correct table from the previous roll
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-        If ($Manual -eq $True) {Do {$Die = Read-Host "Rol 1d100 voor wat voor rod. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+        If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 what kind of rod. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
         If ($ItemPower -eq "medium") {$Item.BaseItem = "Rod of " + (Get-DNDRodMedium -Dieroll $Die)}
         If ($ItemPower -eq "major")  {$Item.BaseItem = "Rod of " + (Get-DNDRodMajor -Dieroll $Die)}
@@ -1236,7 +1234,7 @@ If ($Number -eq 1) {
     If ($Item.BaseItem -eq "scroll") {
         #Search through the table of items, getting the correct table from the previous roll
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-        If ($Manual -eq $True) {Do {$Die = Read-Host "Rol 1d100 voor wat voor scroll. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+        If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 what kind of scroll. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
         If ($ItemPower -eq "minor")  {$Item.BaseItem = "Scroll met " + (Get-DNDScrollMinor -Dieroll $Die) + " level spreuk"}
         If ($ItemPower -eq "medium") {$Item.BaseItem = "Scroll met " + (Get-DNDScrollMedium -Dieroll $Die) + " level spreuk"}
@@ -1251,7 +1249,7 @@ If ($Number -eq 1) {
     If ($Item.BaseItem -eq "staff") {
         #Search through the table of items, getting the correct table from the previous roll
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-        If ($Manual -eq $True) {Do {$Die = Read-Host "Rol 1d100 voor wat voor staff. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+        If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 what kind of staff. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
         If ($ItemPower -eq "medium") {$Item.BaseItem = "Staff of " + (Get-DNDStaffMedium -Dieroll $Die)}
         If ($ItemPower -eq "major")  {$Item.BaseItem = "Staff of " + (Get-DNDStaffMajor -Dieroll $Die)}
@@ -1265,7 +1263,7 @@ If ($Number -eq 1) {
     If ($Item.BaseItem -eq "wand") {
         #Search through the table of items, getting the correct table from the previous roll
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-        If ($Manual -eq $True) {Do {$Die = Read-Host "Rol 1d100 voor wat voor wand. Wat rolde je?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+        If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 what kind of wand. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
         If ($ItemPower -eq "minor")  {$Item.BaseItem = "Wand met " + (Get-DNDScrollMinor -Dieroll $Die) + " level spreuk"}
         If ($ItemPower -eq "medium") {$Item.BaseItem = "Wand met " + (Get-DNDScrollMedium -Dieroll $Die) + " level spreuk"}
@@ -1313,8 +1311,8 @@ If ($Number -eq 1) {
     #Create the final item out of all possible different pieces
     $EndItem = $($Item.BaseItem)
     If ($Item.ItemBonus) {$EndItem = $($Item.BaseItem) + " $($Item.ItemBonus)"}
-    If ($Item.SpecialAbility) {$EndItem = $($Item.BaseItem) +  " met " + ($Item.SpecialAbility -join ", ")}
-    If ($Item.WandCharges) {$EndItem = $($Item.BaseItem) + " en $($Item.WandCharges) charges"}
+    If ($Item.SpecialAbility) {$EndItem = $($Item.BaseItem) +  " with " + ($Item.SpecialAbility -join ", ")}
+    If ($Item.WandCharges) {$EndItem = $($Item.BaseItem) + " and $($Item.WandCharges) charges"}
     Write-Host "$EndItem" -ForegroundColor Green
     
     #endregion user feedback
