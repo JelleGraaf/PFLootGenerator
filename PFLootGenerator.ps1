@@ -1126,7 +1126,7 @@ If ($Number -eq 1) {
             #In very lucky cases, roll extra for more special abilities
             If ($Item.SpecialAbility -eq "roll twice again") {
                 $Rolls = 2
-                Write-Host "This is your lucky day! Roll twice again for special abilities!"
+                If ($Manual -eq $True) {Write-Host "This is your lucky day! Roll twice again for special abilities!"}
     
                 #Keep rolling until there are no more rerolls
                 While ($Rolls -ne 0) {
@@ -1192,9 +1192,9 @@ If ($Number -eq 1) {
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
         If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 for what kind of potion. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
-        If ($ItemPower -eq "minor")  {$Item.BaseItem = "Potion met " + (Get-DNDPotionMinor -Dieroll $Die) + " level spreuk"}
-        If ($ItemPower -eq "medium") {$Item.BaseItem = "Potion met " + (Get-DNDPotionMedium -Dieroll $Die) + " level spreuk"}
-        If ($ItemPower -eq "major")  {$Item.BaseItem = "Potion met " + (Get-DNDPotionMajor -Dieroll $Die) + " level spreuk"}
+        If ($ItemPower -eq "minor")  {$Item.BaseItem = "Potion with " + (Get-DNDPotionMinor -Dieroll $Die) + " level spell"}
+        If ($ItemPower -eq "medium") {$Item.BaseItem = "Potion with " + (Get-DNDPotionMedium -Dieroll $Die) + " level spell"}
+        If ($ItemPower -eq "major")  {$Item.BaseItem = "Potion with " + (Get-DNDPotionMajor -Dieroll $Die) + " level spell"}
     }
     #endregion potions
     
@@ -1236,9 +1236,9 @@ If ($Number -eq 1) {
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
         If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 what kind of scroll. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
-        If ($ItemPower -eq "minor")  {$Item.BaseItem = "Scroll met " + (Get-DNDScrollMinor -Dieroll $Die) + " level spreuk"}
-        If ($ItemPower -eq "medium") {$Item.BaseItem = "Scroll met " + (Get-DNDScrollMedium -Dieroll $Die) + " level spreuk"}
-        If ($ItemPower -eq "major")  {$Item.BaseItem = "Scroll met " + (Get-DNDScrollMajor -Dieroll $Die) + " level spreuk"}
+        If ($ItemPower -eq "minor")  {$Item.BaseItem = "Scroll with " + (Get-DNDScrollMinor -Dieroll $Die) + " level spell"}
+        If ($ItemPower -eq "medium") {$Item.BaseItem = "Scroll with " + (Get-DNDScrollMedium -Dieroll $Die) + " level spell"}
+        If ($ItemPower -eq "major")  {$Item.BaseItem = "Scroll with " + (Get-DNDScrollMajor -Dieroll $Die) + " level spell"}
     }
     #endregion scrolls
     
@@ -1265,9 +1265,9 @@ If ($Number -eq 1) {
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
         If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 what kind of wand. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
-        If ($ItemPower -eq "minor")  {$Item.BaseItem = "Wand met " + (Get-DNDScrollMinor -Dieroll $Die) + " level spreuk"}
-        If ($ItemPower -eq "medium") {$Item.BaseItem = "Wand met " + (Get-DNDScrollMedium -Dieroll $Die) + " level spreuk"}
-        If ($ItemPower -eq "major")  {$Item.BaseItem = "Wand met " + (Get-DNDScrollMajor -Dieroll $Die) + " level spreuk"}
+        If ($ItemPower -eq "minor")  {$Item.BaseItem = "Wand with " + (Get-DNDScrollMinor -Dieroll $Die) + " level spell"}
+        If ($ItemPower -eq "medium") {$Item.BaseItem = "Wand with " + (Get-DNDScrollMedium -Dieroll $Die) + " level spell"}
+        If ($ItemPower -eq "major")  {$Item.BaseItem = "Wand with " + (Get-DNDScrollMajor -Dieroll $Die) + " level spell"}
         $Item.WandCharges = Get-Random -Minimum 1 -Maximum 51
     }
     #endregion wands
