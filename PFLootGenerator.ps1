@@ -2,14 +2,14 @@
 # Script name: PFLootGenerator.ps1                                   #
 # Version: 0.1                                                       #
 # Created by: Jelle de Graaf                                         #
-# Last change: 03-07-2017                                            #
+# Last change: 04-07-2017                                            #
 # GitHub repository: https://github.com/JelleGraaf/PFLootGenerator   #
 ######################################################################
 <#
 .Synopsis
-    Generate random Pathfinder loot
+    Generate random Pathfinder RPG loot
 .DESCRIPTION
-    This script generates a random piece of loot, according to the random tables in the Pathfinder Core Rulebook
+    This script generates random pieces of loot, following the random tables in the Pathfinder Core Rulebook
 .EXAMPLE
     Full syntax: PFLootGenerator.ps1 -Number 1 -ItemPower minor -Manual
     This will give you one minor item, while inputting every die roll manually
@@ -28,11 +28,6 @@
     Make armor code like weapon code, considering the armor type
 #>
 
-#This script generates a random piece of loot, according to the random tables in the Pathfinder Core Rulebook
-#For now, you can choose to roll yourself, or let the script roll
-#To fix:
-    #Wondrous items with a bonus (e.g. +1) show the bonus two times
-
 Param(
     [Parameter(Position=1)]
     [ValidateRange(1,100)]
@@ -44,8 +39,7 @@ Param(
     $ItemPower = "minor" #To specify the item power (minor, medium or major). Defaults to minor
 ,
     [Switch]
-    $Manual #To specify whether the script should rol the dice, or the user
-
+    $Manual #To specify whether the script should rol the dice, or to do it yourself and input the results
 )
 
 
