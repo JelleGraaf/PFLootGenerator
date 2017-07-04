@@ -525,8 +525,8 @@ Function Get-DNDSpecificWeaponMedium {
         {38..40 -contains $_}  {$SpecificWeaponMedium = "Shatterspike"}
         {41..46 -contains $_}  {$SpecificWeaponMedium = "Dagger of venom"}
         {47..51 -contains $_}  {$SpecificWeaponMedium = "Trident of warning"}
-        {52..57 -contains $_}  {$SpecificWeaponMedium = "Assassin’s dagger"}
-        {58..62 -contains $_}  {$SpecificWeaponMedium = "Shifter’s sorrow"}
+        {52..57 -contains $_}  {$SpecificWeaponMedium = "Assassin's dagger"}
+        {58..62 -contains $_}  {$SpecificWeaponMedium = "Shifter's sorrow"}
         {63..66 -contains $_}  {$SpecificWeaponMedium = "Trident of fish command"}
         {67..74 -contains $_}  {$SpecificWeaponMedium = "Flame tongue"}
         {75..79 -contains $_}  {$SpecificWeaponMedium = "Luck blade (0 wishes)"}
@@ -545,8 +545,8 @@ Function Get-DNDSpecificWeaponMajor {
         )
 
     Switch ($Dieroll) {
-        {01..04 -contains $_} {$SpecificWeaponMajor = "Assassin’s dagger"}
-        {05..07 -contains $_} {$SpecificWeaponMajor = "Shifter’s sorrow"}
+        {01..04 -contains $_} {$SpecificWeaponMajor = "Assassin's dagger"}
+        {05..07 -contains $_} {$SpecificWeaponMajor = "Shifter's sorrow"}
         {08..09 -contains $_} {$SpecificWeaponMajor = "Trident of fish command"}
         {10..13 -contains $_} {$SpecificWeaponMajor = "Flame tongue"}
         {14..17 -contains $_} {$SpecificWeaponMajor = "Luck blade (0 wishes)"}
@@ -956,7 +956,7 @@ Function Get-DNDWondrousItemMinor {
         "Bag of tricks, gray"
         "Dust of disappearance"
         "Lens of detection"
-        "Vestment, druid’s"
+        "Vestment, druid's"
         "Figurine of wondrous power, silver raven"
         "Belt of giant strength +2"
         "Belt of incredible dexterity +2"
@@ -1049,7 +1049,7 @@ Function Get-DNDWondrousItemMedium {
         "Blessed book"
         "Gem of brightness"
         "Lyre of building"
-        "Robe, Monk’s"
+        "Robe, Monk's"
         "Cloak of arachnida"
         "Belt of dwarvenkind"
         "Periapt of wound closure"
@@ -1233,8 +1233,7 @@ Function Get-DNDWondrousItemMajor {
 Clear-Host
 
 #Give feedback to user when $ItemPower isn't specified
-If ($ItemPower -eq "minor" -or $ItemPower -eq "medium" -or $ItemPower -eq "major") { 
-    } Else {
+If ( $ItemPower -notin @("minor","medium","major")) {
     Write-Host "No item power specified, defaulting to Minor"
 }
 
@@ -1251,7 +1250,7 @@ If ($Number -eq 1) {
 #region main loop
 #-------------------------
 #Run through the script for a specified number of times
-1..$Number | % {
+1..$Number | ForEach-Object {
 
     #Define / clear variables
     $Item = @{
@@ -1525,7 +1524,7 @@ If ($Number -eq 1) {
     #If a specific item has been generated, overwrite possible bogus itemstats here
     If ($Item.SpecificItem) {
         $Item.BaseItem = $Item.SpecificItem
-        $Item.SpecialAbility = ""
+        $Item.SpecialAbility = @()
         $Item.ItemBonus = ""
     }
     
@@ -1545,7 +1544,7 @@ If ($Number -eq 1) {
     #Create the final item out of all possible different pieces
     $EndItem = $($Item.BaseItem)
     If ($Item.ItemBonus) {$EndItem = $($Item.BaseItem) + " $($Item.ItemBonus)"}
-    If ($Item.SpecialAbility) {$EndItem = $($Item.BaseItem) +  " with " + ($Item.SpecialAbility -join ", ")}
+    If ($Item.SpecialAbility) {$EndItem = $($Item.BaseItem) +  " with " + (@($Item.SpecialAbility) -join ", ")}
     If ($Item.WandCharges) {$EndItem = $($Item.BaseItem) + " and $($Item.WandCharges) charges"}
     Write-Host "$EndItem" -ForegroundColor Green
     
