@@ -1,6 +1,6 @@
 ######################################################################
 # Script name: PFLootGenerator.ps1                                   #
-# Version: 0.1                                                       #
+# Version: 1.0                                                       #
 # Created by: Jelle de Graaf                                         #
 # Last change: 06-07-2017                                            #
 # GitHub repository: https://github.com/JelleGraaf/PFLootGenerator   #
@@ -9,7 +9,7 @@
 .Synopsis
     Generate random Pathfinder RPG loot
 .DESCRIPTION
-    This script generates random pieces of loot, following the random tables in the Pathfinder Core Rulebook
+    This script generates random pieces of loot, following the random tables in the Pathfinder RPG Core Rulebook
 .EXAMPLE
     Full syntax: PFLootGenerator.ps1 -Number 1 -ItemPower minor -Type "armor or shield" -Manual
     This will give you one minor item of the type "armor or shield", while inputting every die roll manually
@@ -22,6 +22,7 @@
 .EXAMPLE
     Shortest syntax: PFLootGenerator.ps1
     This will give you one minor item without further required input
+
 .To fix:
     Multiple special abilities aren't joined with a comma and a space, which they should be
 #>
