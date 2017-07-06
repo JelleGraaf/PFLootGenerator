@@ -11,15 +11,17 @@
 .DESCRIPTION
     This script generates random pieces of loot, following the random tables in the Pathfinder Core Rulebook
 .EXAMPLE
-    Full syntax: PFLootGenerator.ps1 -Number 1 -ItemPower minor -Manual
-    This will give you one minor item, while inputting every die roll manually
+    Full syntax: PFLootGenerator.ps1 -Number 1 -ItemPower minor -Type "armor or shield" -Manual
+    This will give you one minor item of the type "armor or shield", while inputting every die roll manually
 .EXAMPLE
     Short syntax: PFLootGenerator.ps1 10 major
+    This will give you 10 major items
+.EXAMPLE
+    Short syntax: PFLootGenerator.ps1 5 medium scroll
+    This will give you 5 medium scrolls
 .EXAMPLE
     Shortest syntax: PFLootGenerator.ps1
     This will give you one minor item without further required input
-.TO DO
-    Remove duplicate powers on items that have them
 .To fix:
     Multiple special abilities aren't joined with a comma and a space, which they should be
 #>
@@ -1416,7 +1418,7 @@ If ($Number -eq 1) {
 }
 
 #Inform user that only a specified item type is used
-If ($Type -in @("armor or shield","weapon","potion","ring","scroll","wand","wondrous item")) {
+If ($Type -in @("armor or shield","weapon","potion","ring","rod","scroll","staff","wand","wondrous item")) {
     Write-Host "You chose to only generate items of the type " -NoNewline
     Write-Host "$Type" -ForegroundColor Cyan
 }
@@ -1443,7 +1445,7 @@ If ($Type -in @("armor or shield","weapon","potion","ring","scroll","wand","wond
     #region first roll: determine item type
     #-------------------------
     #Check if the Type parameter is filled with a usable value and only do the first roll if it isn't
-    If ($Type -notin @("armor or shield","weapon","potion","ring","scroll","wand","wondrous item")) {
+    If ($Type -notin @("armor or shield","weapon","potion","ring","rod","scroll","staff","wand","wondrous item")) {
         #Roll the die and get the appropriate item type from the specified table
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
         If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 for the item type. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
@@ -1459,13 +1461,15 @@ If ($Type -in @("armor or shield","weapon","potion","ring","scroll","wand","wond
         }
     } Else {
         $Item.BaseItem = $Type
+    } #End else    
+
     #endregion eerste rol
     
     
     #-------------------------
     #region second roll and further: determine item
     #-------------------------
-
+    
     #-------------------------
     #region armors and shields
     #-------------------------
@@ -1787,8 +1791,7 @@ If ($Type -in @("armor or shield","weapon","potion","ring","scroll","wand","wond
         If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDWondrousItemMajor}
     }
     #endregion wondrous items
-
-} #End main loop    
+    
     #endregion tweede rol
     
     
@@ -1801,7 +1804,10 @@ If ($Type -in @("armor or shield","weapon","potion","ring","scroll","wand","wond
         $Item.SpecialAbility = ""
         $Item.ItemBonus = ""
     }
-    
+
+    #Remove duplicate abilities from the list of special abilities
+    $Item.SpecialAbility = $Item.SpecialAbility | select -uniq
+        
     #Extract the item bonus from the base item
     If ($Item.BaseItem -like "*+1*") {$item.ItemBonus = "+1"}
     If ($Item.BaseItem -like "*+2*") {$item.ItemBonus = "+2"}
