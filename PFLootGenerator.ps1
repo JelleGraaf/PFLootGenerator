@@ -2,7 +2,7 @@
 # Script name: PFLootGenerator.ps1                                   #
 # Version: 0.1                                                       #
 # Created by: Jelle de Graaf                                         #
-# Last change: 04-07-2017                                            #
+# Last change: 06-07-2017                                            #
 # GitHub repository: https://github.com/JelleGraaf/PFLootGenerator   #
 ######################################################################
 <#
@@ -19,13 +19,9 @@
     Shortest syntax: PFLootGenerator.ps1
     This will give you one minor item without further required input
 .TO DO
-    Add functions and code for special ability of weapons
-    Add spell lists for potions, scrolls and wands
     Remove duplicate powers on items that have them
 .To fix:
-    items other than armor/shield with a bonus (e.g. +1) show the bonus two times
     Multiple special abilities aren't joined with a comma and a space, which they should be
-    Make armor code like weapon code, considering the armor type
 #>
 
 Param(
@@ -38,10 +34,13 @@ Param(
     [String]
     $ItemPower = "minor" #To specify the item power (minor, medium or major). Defaults to minor
 ,
+    [Parameter(Position=3)]
+    [String]
+    $Type = $null #To specify the base item and skip the first roll
+,
     [Switch]
     $Manual #To specify whether the script should rol the dice, or to do it yourself and input the results
 )
-
 
 #-------------------------
 #region define functions
@@ -52,7 +51,7 @@ Function Get-DNDRandomItemTypeMinor {
         )
 
     Switch ($Dieroll) {
-        {1..4 -contains $_}    {$ItemType = "armor or shield" }
+        {1..4 -contains $_}    {$ItemType = "armor or shield"}
         {5..9 -contains $_}    {$ItemType = "weapon"}
         {10..44 -contains $_}  {$ItemType = "potion"}
         {45..46 -contains $_}  {$ItemType = "ring"}
@@ -164,7 +163,7 @@ Function Get-DNDRandomArmorType {
         "Leather"
         "Studded leather"
         "Chain shirt"
-        "Hide"
+        "Hide armor"
         "Scale mail"
         "Chainmail"
         "Breastplate"
@@ -405,7 +404,7 @@ Function Get-DNDRandomWeaponMajor {
     return $WeaponMajor
 } #End function Get-DNDRandomWeaponMajor
 
-Function Get-DNDWeaponType {
+Function Get-DNDMeleeWeaponType {
     $WeaponTypeList = @(
         "Axe, orc double"
         "Axe, throwing"
@@ -462,7 +461,14 @@ Function Get-DNDWeaponType {
         "Waraxe, dwarven"
         "Warhammer"
         "Whip"
-        #Ranged weapons from here, if you even need to separate
+    ) #End ItemList
+    
+    $WeaponType = $WeaponTypeList | Get-Random
+    return $WeaponType
+} #End function Get-DNDMeleeWeaponType
+
+Function Get-DNDRangedWeaponType {
+    $WeaponTypeList = @(
         "Blowgun"
         "Bolas"
         "Crossbow, hand"
@@ -519,8 +525,8 @@ Function Get-DNDSpecificWeaponMedium {
         {38..40 -contains $_}  {$SpecificWeaponMedium = "Shatterspike"}
         {41..46 -contains $_}  {$SpecificWeaponMedium = "Dagger of venom"}
         {47..51 -contains $_}  {$SpecificWeaponMedium = "Trident of warning"}
-        {52..57 -contains $_}  {$SpecificWeaponMedium = "Assassin’s dagger"}
-        {58..62 -contains $_}  {$SpecificWeaponMedium = "Shifter’s sorrow"}
+        {52..57 -contains $_}  {$SpecificWeaponMedium = "Assassin's dagger"}
+        {58..62 -contains $_}  {$SpecificWeaponMedium = "Shifter's sorrow"}
         {63..66 -contains $_}  {$SpecificWeaponMedium = "Trident of fish command"}
         {67..74 -contains $_}  {$SpecificWeaponMedium = "Flame tongue"}
         {75..79 -contains $_}  {$SpecificWeaponMedium = "Luck blade (0 wishes)"}
@@ -539,8 +545,8 @@ Function Get-DNDSpecificWeaponMajor {
         )
 
     Switch ($Dieroll) {
-        {01..04 -contains $_} {$SpecificWeaponMajor = "Assassin’s dagger"}
-        {05..07 -contains $_} {$SpecificWeaponMajor = "Shifter’s sorrow"}
+        {01..04 -contains $_} {$SpecificWeaponMajor = "Assassin's dagger"}
+        {05..07 -contains $_} {$SpecificWeaponMajor = "Shifter's sorrow"}
         {08..09 -contains $_} {$SpecificWeaponMajor = "Trident of fish command"}
         {10..13 -contains $_} {$SpecificWeaponMajor = "Flame tongue"}
         {14..17 -contains $_} {$SpecificWeaponMajor = "Luck blade (0 wishes)"}
@@ -564,6 +570,177 @@ Function Get-DNDSpecificWeaponMajor {
     } #End Switch
     return $SpecificWeaponMajor
 } #End function Get-DNDSpecificWeaponMajor
+
+Function Get-DNDRandomMeleeWeaponAbilityMinor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..10 -contains $_}  {$WeaponAbility = "Bane"}
+        {11..17 -contains $_}  {$WeaponAbility = "Defending"}
+        {18..27 -contains $_}  {$WeaponAbility = "Flaming"}
+        {28..37 -contains $_}  {$WeaponAbility = "Frost"}
+        {38..47 -contains $_}  {$WeaponAbility = "Shock"}
+        {48..56 -contains $_}  {$WeaponAbility = "Ghost touch"}
+        {57..67 -contains $_}  {$WeaponAbility = "Keen"}
+        {68..71 -contains $_}  {$WeaponAbility = "Ki Focus"}
+        {72..75 -contains $_}  {$WeaponAbility = "Merciful"}
+        {76..82 -contains $_}  {$WeaponAbility = "Mighty cleaving"}
+        {83..87 -contains $_}  {$WeaponAbility = "Spell storing"}
+        {88..91 -contains $_}  {$WeaponAbility = "Throwing"}
+        {92..95 -contains $_}  {$WeaponAbility = "Thundering"}
+        {96..99 -contains $_}  {$WeaponAbility = "Vicious"}
+        {100    -contains $_}  {$WeaponAbility = "Roll again twice"}
+    } #End Switch
+    return $WeaponAbility
+} #End function Get-DNDRandomMeleeWeaponAbilityMinor
+
+Function Get-DNDRandomMeleeWeaponAbilityMedium {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..06 -contains $_}  {$WeaponAbility = "Bane"}
+        {07..12 -contains $_}  {$WeaponAbility = "Defending"}
+        {13..19 -contains $_}  {$WeaponAbility = "Flaming"}
+        {20..26 -contains $_}  {$WeaponAbility = "Frost"}
+        {27..33 -contains $_}  {$WeaponAbility = "Shock"}
+        {34..38 -contains $_}  {$WeaponAbility = "Ghost touch"}
+        {39..44 -contains $_}  {$WeaponAbility = "Keen"}
+        {45..48 -contains $_}  {$WeaponAbility = "Ki Focus"}
+        {49..50 -contains $_}  {$WeaponAbility = "Merciful"}
+        {51..54 -contains $_}  {$WeaponAbility = "Mighty cleaving"}
+        {55..59 -contains $_}  {$WeaponAbility = "Spell storing"}
+        {60..63 -contains $_}  {$WeaponAbility = "Throwing"}
+        {64..65 -contains $_}  {$WeaponAbility = "Thundering"}
+        {66..69 -contains $_}  {$WeaponAbility = "Vicious"}
+        {70..72 -contains $_}  {$WeaponAbility = "Anarchic"}
+        {73..75 -contains $_}  {$WeaponAbility = "Axiomatic"}
+        {76..78 -contains $_}  {$WeaponAbility = "Disruption"}
+        {79..81 -contains $_}  {$WeaponAbility = "Flaming burst"}
+        {82..84 -contains $_}  {$WeaponAbility = "Icy burst"}
+        {85..87 -contains $_}  {$WeaponAbility = "Holy"}
+        {88..90 -contains $_}  {$WeaponAbility = "Shocking burst"}
+        {91..93 -contains $_}  {$WeaponAbility = "Unholy"}
+        {94..95 -contains $_}  {$WeaponAbility = "Wounding"}
+        {96..100 -contains $_} {$WeaponAbility = "Roll again twice"}
+    } #End Switch
+    return $WeaponAbility
+} #End function Get-DNDRandomMeleeWeaponAbilityMedium
+
+Function Get-DNDRandomMeleeWeaponAbilityMajor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..03 -contains $_}  {$WeaponAbility = "Bane"}
+        {04..06 -contains $_}  {$WeaponAbility = "Flaming"}
+        {07..09 -contains $_}  {$WeaponAbility = "Frost"}
+        {10..12 -contains $_}  {$WeaponAbility = "Shock"}
+        {13..15 -contains $_}  {$WeaponAbility = "Ghost touch"}
+        {16..19 -contains $_}  {$WeaponAbility = "Ki Focus"}
+        {20..21 -contains $_}  {$WeaponAbility = "Mighty cleaving"}
+        {22..24 -contains $_}  {$WeaponAbility = "Spell storing"}
+        {25..28 -contains $_}  {$WeaponAbility = "Throwing"}
+        {29..32 -contains $_}  {$WeaponAbility = "Thundering"}
+        {33..36 -contains $_}  {$WeaponAbility = "Vicious"}
+        {37..41 -contains $_}  {$WeaponAbility = "Anarchic"}
+        {42..46 -contains $_}  {$WeaponAbility = "Axiomatic"}
+        {47..49 -contains $_}  {$WeaponAbility = "Disruption"}
+        {50..54 -contains $_}  {$WeaponAbility = "Flaming burst"}
+        {55..59 -contains $_}  {$WeaponAbility = "Icy burst"}
+        {60..64 -contains $_}  {$WeaponAbility = "Holy"}
+        {65..69 -contains $_}  {$WeaponAbility = "Shocking burst"}
+        {70..74 -contains $_}  {$WeaponAbility = "Unholy"}
+        {75..78 -contains $_}  {$WeaponAbility = "Wounding"}
+        {79..83 -contains $_}  {$WeaponAbility = "Speed"}
+        {84..86 -contains $_}  {$WeaponAbility = "Brilliant energy"}
+        {87..88 -contains $_}  {$WeaponAbility = "Dancing"}
+        {89..90 -contains $_}  {$WeaponAbility = "Vorpal"}
+        {91..100 -contains $_} {$WeaponAbility = "Roll again twice"}
+    } #End Switch
+    return $WeaponAbility
+} #End function Get-DNDRandomMeleeWeaponAbilityMajor
+
+
+
+Function Get-DNDRandomRangedWeaponAbilityMinor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..12 -contains $_}  {$WeaponAbility = "Bane"}
+        {13..25 -contains $_}  {$WeaponAbility = "Distance"}
+        {26..40 -contains $_}  {$WeaponAbility = "Flaming"}
+        {41..55 -contains $_}  {$WeaponAbility = "Frost"}
+        {56..60 -contains $_}  {$WeaponAbility = "Merciful"}
+        {61..68 -contains $_}  {$WeaponAbility = "Returning"}
+        {69..83 -contains $_}  {$WeaponAbility = "Shock"}
+        {84..93 -contains $_}  {$WeaponAbility = "Seeking"}
+        {94..99 -contains $_}  {$WeaponAbility = "Thundering"}
+        {100    -contains $_}  {$WeaponAbility = "Roll again twice"}
+    } #End Switch
+    return $WeaponAbility
+} #End function Get-DNDRandomRangedWeaponAbilityMinor
+
+Function Get-DNDRandomRangedWeaponAbilityMedium {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..08 -contains $_}  {$WeaponAbility = "Bane"}
+        {09..16 -contains $_}  {$WeaponAbility = "Distance"}
+        {17..28 -contains $_}  {$WeaponAbility = "Flaming"}
+        {29..40 -contains $_}  {$WeaponAbility = "Frost"}
+        {41..42 -contains $_}  {$WeaponAbility = "Merciful"}
+        {43..47 -contains $_}  {$WeaponAbility = "Returning"}
+        {48..59 -contains $_}  {$WeaponAbility = "Shock"}
+        {60..64 -contains $_}  {$WeaponAbility = "Seeking"}
+        {65..68 -contains $_}  {$WeaponAbility = "Thundering"}
+        {69..71 -contains $_}  {$WeaponAbility = "Anarchic"}
+        {72..74 -contains $_}  {$WeaponAbility = "Axiomatic"}
+        {75..79 -contains $_}  {$WeaponAbility = "Flaming burst"}
+        {80..82 -contains $_}  {$WeaponAbility = "Holy"}
+        {83..87 -contains $_}  {$WeaponAbility = "Icy burst"}
+        {88..92 -contains $_}  {$WeaponAbility = "Shocking burst"}
+        {93..95 -contains $_}  {$WeaponAbility = "Unholy"}
+        {96..100 -contains $_} {$WeaponAbility = "Roll again twice"}
+    } #End Switch
+    return $WeaponAbility
+} #End function Get-DNDRandomRangedWeaponAbilityMedium
+
+Function Get-DNDRandomRangedWeaponAbilityMajor {
+    param (
+        $Dieroll
+        )
+
+    Switch ($Dieroll) {
+        {01..04 -contains $_}  {$WeaponAbility = "Bane"}
+        {05..08 -contains $_}  {$WeaponAbility = "Distance"}
+        {09..12 -contains $_}  {$WeaponAbility = "Flaming"}
+        {13..16 -contains $_}  {$WeaponAbility = "Frost"}
+        {17..21 -contains $_}  {$WeaponAbility = "Returning"}
+        {22..25 -contains $_}  {$WeaponAbility = "Shock"}
+        {26..27 -contains $_}  {$WeaponAbility = "Seeking"}
+        {28..29 -contains $_}  {$WeaponAbility = "Thundering"}
+        {30..34 -contains $_}  {$WeaponAbility = "Anarchic"}
+        {35..39 -contains $_}  {$WeaponAbility = "Axiomatic"}
+        {40..49 -contains $_}  {$WeaponAbility = "Flaming burst"}
+        {50..54 -contains $_}  {$WeaponAbility = "Holy"}
+        {55..64 -contains $_}  {$WeaponAbility = "Icy burst"}
+        {65..74 -contains $_}  {$WeaponAbility = "Shocking burst"}
+        {75..79 -contains $_}  {$WeaponAbility = "Unholy"}
+        {80..84 -contains $_}  {$WeaponAbility = "Speed"}
+        {85..90 -contains $_}  {$WeaponAbility = "Brilliant energy"}
+        {91..100 -contains $_} {$WeaponAbility = "Roll again twice"}
+    } #End Switch
+    return $WeaponAbility
+} #End function Get-DNDRandomRangedWeaponAbilityMajor
 
 Function Get-DNDPotionMinor {
     param (
@@ -950,7 +1127,7 @@ Function Get-DNDWondrousItemMinor {
         "Bag of tricks, gray"
         "Dust of disappearance"
         "Lens of detection"
-        "Vestment, druid’s"
+        "Vestment, druid's"
         "Figurine of wondrous power, silver raven"
         "Belt of giant strength +2"
         "Belt of incredible dexterity +2"
@@ -1043,7 +1220,7 @@ Function Get-DNDWondrousItemMedium {
         "Blessed book"
         "Gem of brightness"
         "Lyre of building"
-        "Robe, Monk’s"
+        "Robe, Monk's"
         "Cloak of arachnida"
         "Belt of dwarvenkind"
         "Periapt of wound closure"
@@ -1161,7 +1338,6 @@ Function Get-DNDWondrousItemMajor {
         "Robe of stars"
         "Carpet of flying, 10 ft. by 10 ft."
         "Darkskull"
-        "Item Market Price"
         "Cube of force"
         "Belt of physical perfection +4"
         "Bracers of armor +8"
@@ -1227,17 +1403,22 @@ Function Get-DNDWondrousItemMajor {
 Clear-Host
 
 #Give feedback to user when $ItemPower isn't specified
-If ($ItemPower -eq "minor" -or $ItemPower -eq "medium" -or $ItemPower -eq "major") { 
-    } Else {
-    Write-Host "No item power specified, defaulting to Minor"
+If ($ItemPower -notin @("minor","medium","major")) {
+    Write-Host "No correct item power specified, defaulting to Minor"
+    $ItemPower = "minor"
 }
 
 #Give an overview of what is going to happen next
 If ($Number -eq 1) {
-    Write-Host "You will get $Number $ItemPower item:"
+    Write-Host "You will get $Number $ItemPower item."
 } Else {
-    Write-Host "You will get $Number $ItemPower items:"
+    Write-Host "You will get $Number $ItemPower items"
+}
 
+#Inform user that only a specified item type is used
+If ($Type -in @("armor or shield","weapon","potion","ring","scroll","wand","wondrous item")) {
+    Write-Host "You chose to only generate items of the type " -NoNewline
+    Write-Host "$Type" -ForegroundColor Cyan
 }
 #endregion header
 
@@ -1245,7 +1426,7 @@ If ($Number -eq 1) {
 #region main loop
 #-------------------------
 #Run through the script for a specified number of times
-1..$Number | % {
+1..$Number | ForEach-Object {
 
     #Define / clear variables
     $Item = @{
@@ -1261,27 +1442,30 @@ If ($Number -eq 1) {
     #-------------------------
     #region first roll: determine item type
     #-------------------------
-    #Roll the die and get the appropriate item type from the specified table
-    If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
-    If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 for the item type. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
-    
-    If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRandomItemTypeMinor -Dieroll $Die}
-    If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDRandomItemTypeMedium -Dieroll $Die}
-    If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDRandomItemTypeMajor -Dieroll $Die}
-    
-    #User feedback
-    If ($Manual -eq $True) {
-        Write-Host "Je itemtype is: " -NoNewline
-        Write-Host "$($Item.BaseItem)" -ForegroundColor Cyan
-    }
+    #Check if the Type parameter is filled with a usable value and only do the first roll if it isn't
+    If ($Type -notin @("armor or shield","weapon","potion","ring","scroll","wand","wondrous item")) {
+        #Roll the die and get the appropriate item type from the specified table
+        If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
+        If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 for the item type. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+        
+        If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRandomItemTypeMinor -Dieroll $Die}
+        If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDRandomItemTypeMedium -Dieroll $Die}
+        If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDRandomItemTypeMajor -Dieroll $Die}
+        
+        #User feedback
+        If ($Manual -eq $True) {
+            Write-Host "Your itemtype is: " -NoNewline
+            Write-Host "$($Item.BaseItem)" -ForegroundColor Cyan
+        }
+    } Else {
+        $Item.BaseItem = $Type
     #endregion eerste rol
     
     
     #-------------------------
     #region second roll and further: determine item
     #-------------------------
-    
-    
+
     #-------------------------
     #region armors and shields
     #-------------------------
@@ -1333,7 +1517,7 @@ If ($Number -eq 1) {
                     #Get dieroll for the armor ability 1
                     If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
                     If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 for the next ability. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
-                    If ($Die -eq 100) {$Rolls += 2} #Rolling 100 means getting two extra rolls (one of which is always done, so only +1 to the counter)
+                    If ($Die -eq 100) {$Rolls += 2} #Rolling 100 means getting two extra rolls
     
                     #Determine extra ability 
                     If ($ItemPower -eq "minor")  {$Item.SpecialAbility += Get-DNDRandomArmorAbilityMinor -Dieroll $Die; $Rolls -= 1}
@@ -1358,11 +1542,7 @@ If ($Number -eq 1) {
             If ($ItemPower -eq "minor")  {$Item.SpecificItem = (Get-DNDSpecificArmorMinor -Dieroll $Die)}
             If ($ItemPower -eq "medium") {$Item.SpecificItem = (Get-DNDSpecificArmorMedium -Dieroll $Die)}
             If ($ItemPower -eq "major")  {$Item.SpecificItem = (Get-DNDSpecificArmorMajor -Dieroll $Die)}
-        } #Endif specific armor
-    
-        If ($Item.BaseItem -eq "specific shield") {
-            #Set this thing to use at end presentation
-            
+        } elseIf ($Item.BaseItem -eq "specific shield") {
             #Get dieroll for the specific shield
             If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
             If ($Manual -eq $True) {Do {$Die = Read-Host "You get a specific shield. Rol 1d100. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
@@ -1371,7 +1551,18 @@ If ($Number -eq 1) {
             If ($ItemPower -eq "minor")  {$Item.SpecificItem = (Get-DNDSpecificShieldMinor -Dieroll $Die) }
             If ($ItemPower -eq "medium") {$Item.SpecificItem = (Get-DNDSpecificShieldMedium -Dieroll $Die) }
             If ($ItemPower -eq "major")  {$Item.SpecificItem = (Get-DNDSpecificShieldMajor -Dieroll $Die) }
-        } #Endif specific shield
+        } else {
+            #Extract the item bonus from the base item
+            If ($Item.BaseItem -like "*+1*") {$item.ItemBonus = "+1"}
+            If ($Item.BaseItem -like "*+2*") {$item.ItemBonus = "+2"}
+            If ($Item.BaseItem -like "*+3*") {$item.ItemBonus = "+3"}
+            If ($Item.BaseItem -like "*+4*") {$item.ItemBonus = "+4"}
+            If ($Item.BaseItem -like "*+5*") {$item.ItemBonus = "+5"}
+        
+            #Replace the base armor with a specified armor type
+            If ($Item.BaseItem -like "*armor*") {$item.BaseItem = Get-DNDRandomArmorType}
+            If ($Item.BaseItem -like "*shield*") {$item.BaseItem = Get-DNDRandomShieldType}
+        }
     
     } #Endif armor of shield
     
@@ -1382,29 +1573,116 @@ If ($Number -eq 1) {
     #region weapons
     #-------------------------
     If ($Item.BaseItem -eq "weapon") {
+        #Determine if the item will be a melee or a ranged weapon
+        $MeleeOrRangedRoll = Get-Random -Minimum 1 -Maximum 74
+        If ($MeleeOrRangedRoll -in 1..55) {
+            $Item.ItemRange = "melee"
+        } else {
+            $Item.ItemRange = "ranged"
+        }
+
         #Search through the table of items, getting the correct table from the previous roll
         If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
         If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 the kind of weapon. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
         
-        If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMinor -Dieroll $Die}
-        If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMedium -Dieroll $Die}
-        If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMajor -Dieroll $Die}
-        
+        If ($Item.ItemRange -eq "melee") {
+            If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDMeleeWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMinor -Dieroll $Die}
+            If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDMeleeWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMedium -Dieroll $Die}
+            If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDMeleeWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMajor -Dieroll $Die}
+        }
+        If ($Item.ItemRange -eq "ranged") {
+            If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRangedWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMinor -Dieroll $Die}
+            If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDRangedWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMedium -Dieroll $Die}
+            If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDRangedWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMajor -Dieroll $Die}
+        }
+
         #User feedback
         If ($Manual -eq $True -and $Item.ItemBonus -ne "Specific Weapon") {
             Write-Host "Je itemtype is: " -NoNewline
             Write-Host "$($Item.BaseItem)" -ForegroundColor Cyan
         }
+
+        #In lucky cases, roll extra for special abilities
+        While ($Item.ItemBonus -eq "special ability and roll again") {
+            If ($Manual -eq $True) {Write-Host "Lucky! Roll twice again"}
+            $I = 1
+    
+            #Get dieroll for the weapon type
+            If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
+            If ($Manual -eq $True) {Do {$Die = Read-Host "Roll  1d100 again for the weapon. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+            
+            #Determine weapon type
+            If ($Item.ItemRange -eq "melee") {
+                If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDMeleeWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMinor -Dieroll $Die}
+                If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDMeleeWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMedium -Dieroll $Die}
+                If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDMeleeWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMajor -Dieroll $Die}
+            }
+            If ($Item.ItemRange -eq "ranged") {
+                If ($ItemPower -eq "minor")  {$Item.BaseItem = Get-DNDRangedWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMinor -Dieroll $Die}
+                If ($ItemPower -eq "medium") {$Item.BaseItem = Get-DNDRangedWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMedium -Dieroll $Die}
+                If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDRangedWeaponType; $Item.ItemBonus = Get-DNDRandomWeaponMajor -Dieroll $Die}
+            }
+
+            #Get dieroll for the weapon ability
+            If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
+            If ($Manual -eq $True) {$Die = Read-Host "Roll 1d100 for the ability. what is the result of the die roll?"}
+    
+            #Determine weapon ability
+            If ($Item.ItemRange -eq "melee") {
+                If ($ItemPower -eq "minor")  {$Item.SpecialAbility += Get-DNDRandomMeleeWeaponAbilityMinor -Dieroll $Die}
+                If ($ItemPower -eq "medium") {$Item.SpecialAbility += Get-DNDRandomMeleeWeaponAbilityMedium -Dieroll $Die}
+                If ($ItemPower -eq "major")  {$Item.SpecialAbility += Get-DNDRandomMeleeWeaponAbilityMajor -Dieroll $Die}
+            }    
+            If ($Item.ItemRange -eq "ranged") {
+                If ($ItemPower -eq "minor")  {$Item.SpecialAbility += Get-DNDRandomRangedWeaponAbilityMinor -Dieroll $Die}
+                If ($ItemPower -eq "medium") {$Item.SpecialAbility += Get-DNDRandomRangedWeaponAbilityMedium -Dieroll $Die}
+                If ($ItemPower -eq "major")  {$Item.SpecialAbility += Get-DNDRandomRangedWeaponAbilityMajor -Dieroll $Die}
+            }
+
+            #In very lucky cases, roll extra for more special abilities
+            If ($Item.SpecialAbility -eq "Roll again twice") {
+                $Rolls = 2
+                If ($Manual -eq $True) {Write-Host "This is your lucky day! Roll twice again for special abilities!"}
+    
+                #Keep rolling until there are no more rerolls
+                While ($Rolls -ne 0) {
+                    #Get dieroll for the Weapon ability 1
+                    If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
+                    If ($Manual -eq $True) {Do {$Die = Read-Host "Roll 1d100 for the next ability. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
+                    If ($Die -eq 100) {$Rolls += 2} #Rolling 100 means getting two extra rolls (one of which is always done, so only +1 to the counter)
+    
+                    #Determine extra ability 
+                    If ($Item.ItemRange -eq "melee") {
+                        If ($ItemPower -eq "minor")  {$Item.SpecialAbility += Get-DNDRandomMeleeWeaponAbilityMinor -Dieroll $Die; $Rolls -= 1}
+                        If ($ItemPower -eq "medium") {$Item.SpecialAbility += Get-DNDRandomMeleeWeaponAbilityMedium -Dieroll $Die; $Rolls -= 1}
+                        If ($ItemPower -eq "major")  {$Item.SpecialAbility += Get-DNDRandomMeleeWeaponAbilityMajor -Dieroll $Die; $Rolls -= 1}
+                    }    
+                    If ($Item.ItemRange -eq "ranged") {
+                        If ($ItemPower -eq "minor")  {$Item.SpecialAbility += Get-DNDRandomRangedWeaponAbilityMinor -Dieroll $Die; $Rolls -= 1}
+                        If ($ItemPower -eq "medium") {$Item.SpecialAbility += Get-DNDRandomRangedWeaponAbilityMedium -Dieroll $Die; $Rolls -= 1}
+                        If ($ItemPower -eq "major")  {$Item.SpecialAbility += Get-DNDRandomRangedWeaponAbilityMajor -Dieroll $Die; $Rolls -= 1}
+                    }
+                
+                } #End while rolls -ne 0
+    
+            } #End while Roll again twice
+    
+            #Clean up the array from temporary entries
+            $Item.SpecialAbility = $Item.SpecialAbility | Where-Object {$_ -ne "Roll again twice"}
+                
+        } #End while special ability and roll again
+
+        #Roll for what specific weapon
         If ($Item.ItemBonus -eq "Specific weapon") {
-            #Get dieroll for the specific armor
+            #Get dieroll for the specific weapon
             If ($Manual -eq $False) {$Die = Get-Random -Minimum 1 -Maximum 101}
             If ($Manual -eq $True) {Do {$Die = Read-Host "You get a specific weapon. Rol 1d100. what is the result of the die roll?"} While ($Die -notin 1..100)} #Keep asking for input until a value between 1 and 100 is given
     
-            #Determine the specific armor
+            #Determine the specific weapon
             If ($ItemPower -eq "minor")  {$Item.SpecificItem = (Get-DNDSpecificWeaponMinor -Dieroll $Die)}
             If ($ItemPower -eq "medium") {$Item.SpecificItem = (Get-DNDSpecificWeaponMedium -Dieroll $Die)}
             If ($ItemPower -eq "major")  {$Item.SpecificItem = (Get-DNDSpecificWeaponMajor -Dieroll $Die)}
-        } #Endif specific armor
+        } #Endif specific weapon
 
     } #Endif weapon
 
@@ -1509,7 +1787,8 @@ If ($Number -eq 1) {
         If ($ItemPower -eq "major")  {$Item.BaseItem = Get-DNDWondrousItemMajor}
     }
     #endregion wondrous items
-    
+
+} #End main loop    
     #endregion tweede rol
     
     
@@ -1529,17 +1808,11 @@ If ($Number -eq 1) {
     If ($Item.BaseItem -like "*+3*") {$item.ItemBonus = "+3"}
     If ($Item.BaseItem -like "*+4*") {$item.ItemBonus = "+4"}
     If ($Item.BaseItem -like "*+5*") {$item.ItemBonus = "+5"}
-    
-    
-    #Make the base item nicer to read
-    If ($Item.BaseItem -like "*armor*") {$item.BaseItem = Get-DNDRandomArmorType}
-    If ($Item.BaseItem -like "*shield*") {$item.BaseItem = Get-DNDRandomShieldType}
-    
-    
+        
     #Create the final item out of all possible different pieces
     $EndItem = $($Item.BaseItem)
     If ($Item.ItemBonus) {$EndItem = $($Item.BaseItem) + " $($Item.ItemBonus)"}
-    If ($Item.SpecialAbility) {$EndItem = $($Item.BaseItem) +  " with " + ($Item.SpecialAbility -join ", ")}
+    If ($Item.SpecialAbility) {$EndItem = $($Item.BaseItem) +  " with " + (@($Item.SpecialAbility) -join ", ")}
     If ($Item.WandCharges) {$EndItem = $($Item.BaseItem) + " and $($Item.WandCharges) charges"}
     Write-Host "$EndItem" -ForegroundColor Green
     
